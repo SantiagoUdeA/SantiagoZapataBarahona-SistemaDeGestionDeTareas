@@ -5,8 +5,16 @@ import { ProjectsSkeleton } from './_components/projects-skeleton'
 import { CreateProjectDialog } from './_components/create-project-dialog'
 
 export default async function ProjectsPage() {
-  await requireAuth()
+  const user = await requireAuth()
   const session = await getSession()
+
+  if (!session?.id) {
+    return (
+      <div className='container mx-auto py-10'>
+        <p className='text-muted-foreground'>Error loading session</p>
+      </div>
+    )
+  }
 
   return (
     <div className='container mx-auto py-10'>
@@ -18,7 +26,7 @@ export default async function ProjectsPage() {
         <CreateProjectDialog />
       </div>
       <Suspense fallback={<ProjectsSkeleton />}>
-        <ProjectsList userId={session?.id || ''} />
+        <ProjectsList userId={session.id} />
       </Suspense>
     </div>
   )
