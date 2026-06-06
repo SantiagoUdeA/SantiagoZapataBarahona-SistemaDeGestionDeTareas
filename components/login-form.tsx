@@ -6,6 +6,8 @@ import { createClient } from '@/lib/supabase/client';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
 import {
   Field,
   FieldDescription,
@@ -13,6 +15,8 @@ import {
   FieldGroup,
   FieldLabel,
 } from '@/components/ui/field';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { AiMail01Icon, AiLockIcon, AlertCircleIcon } from '@hugeicons/core-free-icons';
 
 export function LoginForm({ className, ...props }: React.ComponentProps<'form'>) {
   const router = useRouter();
@@ -21,6 +25,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'form'>)
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -44,59 +49,97 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'form'>)
 
   return (
     <form onSubmit={handleSubmit} className={cn('flex flex-col gap-6', className)} {...props}>
-      <FieldGroup>
-        <div className='flex flex-col items-center gap-1 text-center'>
-          <h1 className='text-2xl font-bold'>Iniciar sesión</h1>
-          <p className='text-sm text-balance text-muted-foreground'>
-            Ingresá tus credenciales para acceder al área de trabajo
-          </p>
-        </div>
+      <div className='flex flex-col gap-2 text-center md:text-left'>
+        <h1 className='text-3xl font-semibold tracking-tight'>Bienvenido</h1>
+        <p className='text-sm text-muted-foreground'>
+          Ingresá tus credenciales para acceder a la aplicación
+        </p>
+      </div>
 
+      <FieldGroup className='gap-4'>
         <Field>
-          <FieldLabel htmlFor='email'>Email</FieldLabel>
-          <Input
-            id='email'
-            type='email'
-            placeholder='tu@email.com'
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className='bg-background'
-            disabled={isLoading}
-          />
+          <FieldLabel htmlFor='email' className='text-xs uppercase tracking-wider'>
+            Email
+          </FieldLabel>
+          <div className='relative'>
+            <HugeiconsIcon icon={AiMail01Icon} className='absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground' />
+            <Input
+              id='email'
+              type='email'
+              placeholder='nombre@empresa.com'
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className='pl-10'
+              disabled={isLoading}
+            />
+          </div>
         </Field>
 
         <Field>
-          <FieldLabel htmlFor='password'>Contraseña</FieldLabel>
-          <Input
-            id='password'
-            type='password'
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className='bg-background'
-            disabled={isLoading}
-          />
+          <div className='flex items-center justify-between'>
+            <FieldLabel htmlFor='password' className='text-xs uppercase tracking-wider'>
+              Contraseña
+            </FieldLabel>
+            <a
+              href='#'
+              className='text-xs text-primary hover:underline'
+            >
+              ¿Olvidaste la contraseña?
+            </a>
+          </div>
+          <div className='relative'>
+            <HugeiconsIcon icon={AiLockIcon} className='absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground' />
+            <Input
+              id='password'
+              type='password'
+              placeholder='••••••••'
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className='pl-10'
+              disabled={isLoading}
+            />
+          </div>
         </Field>
 
         {error && (
-          <Field>
-            <FieldError>{error}</FieldError>
-          </Field>
+          <div className='flex items-start gap-3 p-3 bg-destructive/10 border border-destructive/20 rounded text-sm text-destructive'>
+            <HugeiconsIcon icon={AlertCircleIcon} className='h-5 w-5 flex-shrink-0 mt-0.5' />
+            <span>{error}</span>
+          </div>
         )}
 
-        <Field>
-          <Button type='submit' disabled={isLoading}>
-            {isLoading ? 'Ingresando...' : 'Iniciar sesión'}
-          </Button>
-        </Field>
+        <div className='flex items-center gap-2'>
+          <Checkbox
+            id='remember-me'
+            checked={rememberMe}
+            onCheckedChange={(checked) => setRememberMe(checked as boolean)}
+            disabled={isLoading}
+          />
+          <Label
+            htmlFor='remember-me'
+            className='text-sm font-normal text-muted-foreground cursor-pointer'
+          >
+            Recuérdame por 30 días
+          </Label>
+        </div>
 
-        <FieldDescription className='text-center'>
+        <Button
+          type='submit'
+          disabled={isLoading}
+          className='w-full'
+          size='lg'
+        >
+          {isLoading ? 'Ingresando...' : 'Iniciar sesión'}
+        </Button>
+
+        <p className='text-center text-sm text-muted-foreground'>
           ¿No tenés cuenta?{' '}
-          <a href='/signup' className='underline underline-offset-4'>
-            Crear cuenta
+          <a href='/signup' className='text-primary hover:underline font-medium'>
+            Solicitar acceso
           </a>
-        </FieldDescription>
+        </p>
       </FieldGroup>
     </form>
   );
