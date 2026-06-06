@@ -1,6 +1,6 @@
 import { getSession } from '@/lib/auth/guard';
 import { NavUser } from '@/components/nav-user';
-import Image from 'next/image';
+import { Logo } from '@/components/logo';
 import {
   Sidebar,
   SidebarContent,
@@ -40,6 +40,8 @@ const navItems = [
 export async function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const user = await getSession();
 
+  console.log('User in AppSidebar:', user);
+
   const sidebarUser = user
     ? {
         name: user.name || user.email || 'Usuario',
@@ -58,9 +60,7 @@ export async function AppSidebar({ ...props }: React.ComponentProps<typeof Sideb
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild className='data-[slot=sidebar-menu-button]:p-1.5!'>
-              <a href='/dashboard'>
-                <Image src='/LogoGreen.png' alt='Logo' width={72} height={72} className='' />
-              </a>
+              <Logo href='/dashboard' size='md' />
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
