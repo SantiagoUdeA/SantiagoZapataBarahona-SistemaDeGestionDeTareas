@@ -65,6 +65,11 @@
   --border: #e5e7eb;
   --input: #e5e7eb;
   --ring: #4f46e5;
+  --error: #ba1a1a;
+  --outline-variant: #c3c8c3;
+  --on-surface-variant: #434844;
+  --surface-container-lowest: #ffffff;
+  --surface-variant: #d3e4fe;
   --chart-1: #10b981;
   --chart-2: #3b82f6;
   --chart-3: #8b5cf6;
