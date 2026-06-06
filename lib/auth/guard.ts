@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { Enum_Role } from '@/app/generated/prisma/enums';
+import { prisma } from '@/lib/prisma';
 
 export async function requireAuth() {
   const supabase = await createClient();
@@ -42,18 +43,20 @@ export async function getSession() {
     return null;
   }
 
-  const { data: profile } = await supabase
-    .from('User')
-    .select('id, name, email, image, role')
-    .eq('id', user.id)
-    .single();
+  const profile = await prisma.user.findUnique({
+    where: { id: user.id },
+    include: { profile: true },
+  });
 
   if (!profile) {
     return null;
   }
 
   return {
-    ...profile,
-    image: profile.image || user.user_metadata?.avatar_url || null,
+    id: profile.id,
+    email: profile.email,
+    name: profile.profile?.name ?? user.email,
+    image: profile.profile?.image ?? user.user_metadata?.avatar_url ?? null,
+    role: profile.role,
   };
 }
