@@ -3,6 +3,12 @@
 ALWAYS READ THIS SKILL BEFORE CONTINUING `.agents/skills/caveman/SKILL.md`
 You have to use caveman in ultra mode
 
+# Design
+
+- If you are crafting or modifying UI you MUST read @DESIGN.md
+- ALWAYS adpat the UI to shadcn components `components/ui`
+
+
 <!-- BEGIN:nextjs-agent-rules -->
 # This is NOT the Next.js you know
 
@@ -33,6 +39,3 @@ This version has breaking changes — APIs, conventions, and file structure may 
 - Sidebar layout in `app/(main)/layout.tsx` with shadcn sidebar
 - Prisma schema in `prisma/schema.prisma` — PostgreSQL, models: User, Perfil, Customer, Supplier, Product, Order, OrderItem, Payment
 
-# Design
-
-If you are crafting or modifying UI you MUST read @DESIGN.md
