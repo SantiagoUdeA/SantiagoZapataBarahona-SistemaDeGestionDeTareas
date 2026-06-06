@@ -10,13 +10,11 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import {
   Field,
-  FieldDescription,
-  FieldError,
   FieldGroup,
   FieldLabel,
 } from '@/components/ui/field';
 import { HugeiconsIcon } from '@hugeicons/react';
-import { AiMail01Icon, AiLockIcon, AlertCircleIcon } from '@hugeicons/core-free-icons';
+import { Mail01Icon, AlertCircleIcon, LockIcon } from '@hugeicons/core-free-icons';
 
 export function LoginForm({ className, ...props }: React.ComponentProps<'form'>) {
   const router = useRouter();
@@ -62,7 +60,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'form'>)
             Email
           </FieldLabel>
           <div className='relative'>
-            <HugeiconsIcon icon={AiMail01Icon} className='absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground' />
+            <HugeiconsIcon icon={Mail01Icon} className='absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground' />
             <Input
               id='email'
               type='email'
@@ -89,7 +87,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'form'>)
             </a>
           </div>
           <div className='relative'>
-            <HugeiconsIcon icon={AiLockIcon} className='absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground' />
+            <HugeiconsIcon icon={LockIcon} className='absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground' />
             <Input
               id='password'
               type='password'

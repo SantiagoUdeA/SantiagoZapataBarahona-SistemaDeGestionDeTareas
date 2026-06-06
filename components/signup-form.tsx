@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { HugeiconsIcon } from '@hugeicons/react';
-import { AiMail01Icon, AiLockIcon, UserAccountIcon, AlertCircleIcon } from '@hugeicons/core-free-icons';
+import { Mail01Icon, LockIcon, UserAccountIcon, AlertCircleIcon } from '@hugeicons/core-free-icons';
 
 export function SignupForm({ className, ...props }: React.ComponentProps<'form'>) {
   const router = useRouter();
@@ -105,7 +105,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<'form'>
               </Label>
               <div className='relative'>
                 <HugeiconsIcon
-                  icon={AiMail01Icon}
+                  icon={Mail01Icon}
                   className='absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-[#434844]'
                 />
                 <Input
@@ -128,7 +128,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<'form'>
               </Label>
               <div className='relative'>
                 <HugeiconsIcon
-                  icon={AiLockIcon}
+                  icon={LockIcon}
                   className='absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-[#434844]'
                 />
                 <Input
