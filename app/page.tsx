@@ -2,13 +2,13 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { Button } from '@/components/ui/button';
+import { Logo } from '@/components/logo';
 import { HugeiconsIcon } from '@hugeicons/react';
 import {
   FlashIcon,
   Analytics01Icon,
   LockKeyIcon,
   ArrowRight01Icon,
-  Tick02Icon,
   Login02Icon,
 } from '@hugeicons/core-free-icons';
 
@@ -48,12 +48,7 @@ export default async function HomePage() {
       {/* Navbar */}
       <header className="sticky top-0 z-50 w-full border-b border-[#d3e4fe] bg-[#f8f9ff]">
         <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#182820]">
-              <HugeiconsIcon icon={Tick02Icon} size={20} color="white" strokeWidth={2.5} />
-            </div>
-            <span className="text-xl font-bold tracking-tight text-[#182820]">TaskFlow</span>
-          </Link>
+          <Logo href="/" showText size="md" />
 
         
 
