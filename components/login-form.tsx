@@ -49,7 +49,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'form'>)
 
   return (
     <form onSubmit={handleSubmit} className={cn('flex flex-col gap-6', className)} {...props}>
-      <div className='flex flex-col gap-2 text-center md:text-left'>
+      <div className='flex flex-col gap-2 text-center lg:text-left'>
         <h1 className='text-3xl font-semibold tracking-tight'>Bienvenido</h1>
         <p className='text-sm text-muted-foreground'>
           Ingresá tus credenciales para acceder a la aplicación
