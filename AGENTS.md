@@ -27,3 +27,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 - `app/api/users/route.ts` — list users
 - Sidebar layout in `app/(main)/layout.tsx` with shadcn sidebar
 - Prisma schema in `prisma/schema.prisma` — PostgreSQL, models: User, Perfil, Customer, Supplier, Product, Order, OrderItem, Payment
+
+# Design
+
+If you are crafting or modifying UI you MUST read @DESIGN.md
