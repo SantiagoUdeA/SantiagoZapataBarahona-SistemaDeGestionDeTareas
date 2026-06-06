@@ -1,7 +1,9 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-export function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest) {
+  let response = NextResponse.next({ request })
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
@@ -11,15 +13,34 @@ export function proxy(request: NextRequest) {
           return request.cookies.getAll()
         },
         setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
+          response = NextResponse.next({ request })
           cookiesToSet.forEach(({ name, value, options }) =>
-            request.cookies.set(name, value)
+            response.cookies.set(name, value, options)
           )
         },
       },
     }
   )
 
-  return NextResponse.next()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  const pathname = request.nextUrl.pathname
+  const isProtected = pathname.startsWith('/dashboard') ||
+                      pathname.startsWith('/projects') ||
+                      pathname.startsWith('/tasks') ||
+                      pathname.startsWith('/users')
+  const isPublic = pathname === '/login' || pathname === '/signup' || pathname === '/'
+
+  if (isProtected && !user) {
+    return NextResponse.redirect(new URL('/login', request.url))
+  }
+
+  if (isPublic && user && pathname !== '/') {
+    return NextResponse.redirect(new URL('/dashboard', request.url))
+  }
+
+  return response
 }
 
 export const config = {

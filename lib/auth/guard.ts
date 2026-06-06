@@ -48,5 +48,12 @@ export async function getSession() {
     .eq('id', user.id)
     .single();
 
-  return profile;
+  if (!profile) {
+    return null;
+  }
+
+  return {
+    ...profile,
+    image: profile.image || user.user_metadata?.avatar_url || null,
+  };
 }

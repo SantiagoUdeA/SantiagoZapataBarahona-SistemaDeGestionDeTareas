@@ -102,7 +102,7 @@ export default async function HomePage() {
         </section>
 
         {/* Features */}
-        <section id="features" className="bg-[#f8f9ff] py-24">
+        <section id="features" className="bg-[#f8f9ff] py-8">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
               {FEATURES.map(({ icon, title, description }) => (
@@ -123,21 +123,8 @@ export default async function HomePage() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-[#374151] bg-[#213145] py-6">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 sm:flex-row lg:px-8">
-          <p className="text-sm text-[#eaf1ff]/80">© 2024 TaskFlow Inc. All rights reserved.</p>
-          <div className="flex gap-4">
-            {['Privacy', 'Terms'].map((item) => (
-              <Link
-                key={item}
-                href="#"
-                className="text-sm text-[#eaf1ff] transition-colors hover:text-white"
-              >
-                {item}
-              </Link>
-            ))}
-          </div>
-        </div>
+      <footer className="border-t border-[#374151] bg-[#213145] text-center py-6">
+          <p className="text-sm text-[#eaf1ff]/80">© 2026 TaskFlow</p>
       </footer>
     </div>
   );
