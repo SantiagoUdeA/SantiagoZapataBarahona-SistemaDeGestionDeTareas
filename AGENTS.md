@@ -1,3 +1,8 @@
+# Caveman mode ultra
+
+ALWAYS READ THIS SKILL BEFORE CONTINUING `.agents/skills/caveman/SKILL.md`
+You have to use caveman in ultra mode
+
 <!-- BEGIN:nextjs-agent-rules -->
 # This is NOT the Next.js you know
 
