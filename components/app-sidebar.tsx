@@ -40,13 +40,11 @@ const navItems = [
 export async function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const user = await getSession();
 
-  console.log('User in AppSidebar:', user);
-
   const sidebarUser = user
     ? {
-        name: user.name || user.email || 'Usuario',
+        name: user.fullName || user.email || 'Usuario',
         email: user.email || '',
-        avatar: user.image || '/avatars/default.png',
+        avatar: user.avatarUrl || '/avatars/default.png',
       }
     : {
         name: 'Invitado',

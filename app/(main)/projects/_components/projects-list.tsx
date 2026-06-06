@@ -43,7 +43,7 @@ export async function ProjectsList({ userId }: { userId: string }) {
                 </span>
               </div>
             </TableCell>
-            <TableCell className='text-sm'>{project.owner.profile?.name || 'Unknown'}</TableCell>
+            <TableCell className='text-sm'>{project.owner.fullName || 'Unknown'}</TableCell>
             <TableCell>
               <ProjectRowActions project={project} />
             </TableCell>

@@ -15,24 +15,12 @@ export async function requireAuth() {
 }
 
 export async function requireRole(role: Enum_Role) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-
-  if (!user) {
+  const session = await getSession();
+  if (!session || session.role !== role) {
     redirect('/login');
   }
 
-  const { data: profile } = await supabase
-    .from('User')
-    .select('role')
-    .eq('id', user.id)
-    .single();
-
-  if (!profile || profile.role !== role) {
-    redirect('/dashboard');
-  }
-
-  return user;
+  return session;
 }
 
 export async function getSession() {
@@ -43,9 +31,8 @@ export async function getSession() {
     return null;
   }
 
-  const profile = await prisma.user.findUnique({
+  const profile = await prisma.profile.findUnique({
     where: { id: user.id },
-    include: { profile: true },
   });
 
   if (!profile) {
@@ -54,9 +41,9 @@ export async function getSession() {
 
   return {
     id: profile.id,
-    email: profile.email,
-    name: profile.profile?.name ?? user.email,
-    image: profile.profile?.image ?? user.user_metadata?.avatar_url ?? null,
+    email: user.email!,
+    fullName: profile.fullName,
+    avatarUrl: profile.avatarUrl,
     role: profile.role,
   };
 }

@@ -12,54 +12,49 @@ enum Enum_Role {
   USER
 }
 
-model User {
-  id               String          @id
-  email            String          @unique
-  deleted          Boolean         @default(false)
-  enabled          Boolean         @default(true)
-  role             Enum_Role?
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime        @updatedAt
-  profile          Profile?
-  ownedProjects    Project[]       @relation("ProjectOwner")
-  memberProjects   ProjectMember[]
-
-  @@index([email])
-}
-
 model Profile {
-  id        String   @id @default(dbgenerated("uuid_generate_v4()"))
-  userId    String   @unique
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  name      String?
-  image     String?
+  id        String    @id @db.Uuid
+  username  String?   @unique
+  fullName  String?
+  avatarUrl String?
   bio       String?
+  role      Enum_Role @default(USER)
+  enabled   Boolean   @default(true)
+  deleted   Boolean   @default(false)
+
+  ownedProjects  Project[]       @relation("ProjectOwner")
+  memberProjects ProjectMember[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("profiles")
 }
 
 model Project {
-  id        String          @id @default(dbgenerated("uuid_generate_v4()"))
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name      String
-  progress  Int             @default(0)
-  createdBy String
-  owner     User            @relation("ProjectOwner", fields: [createdBy], references: [id])
+  progress  Int      @default(0)
+  createdBy String   @db.Uuid
+  owner     Profile  @relation("ProjectOwner", fields: [createdBy], references: [id])
   members   ProjectMember[]
-  createdAt DateTime        @default(now())
-  updatedAt DateTime        @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([createdBy])
+  @@map("projects")
 }
 
 model ProjectMember {
-  id        String   @id @default(dbgenerated("uuid_generate_v4()"))
-  projectId String
-  userId    String
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  projectId String   @db.Uuid
+  userId    String   @db.Uuid
   project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      Profile  @relation(fields: [userId], references: [id], onDelete: Cascade)
   joinedAt  DateTime @default(now())
 
   @@unique([projectId, userId])
   @@index([projectId])
   @@index([userId])
+  @@map("project_members")
 }
