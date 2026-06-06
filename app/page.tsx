@@ -9,7 +9,6 @@ import {
   Analytics01Icon,
   LockKeyIcon,
   ArrowRight01Icon,
-  Login02Icon,
 } from '@hugeicons/core-free-icons';
 
 const FEATURES = [
@@ -49,14 +48,6 @@ export default async function HomePage() {
       <header className="sticky top-0 z-50 w-full border-b border-[#d3e4fe] bg-[#f8f9ff]">
         <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
           <Logo href="/" showText size="md" />
-
-        
-
-          <Button asChild variant="ghost" size="icon" className="h-9 w-9 text-[#0b1c30] hover:bg-[#e5eeff] hover:text-[#4b41e1]">
-            <Link href="/login" aria-label="Iniciar sesión">
-              <HugeiconsIcon icon={Login02Icon} size={20} />
-            </Link>
-          </Button>
         </div>
       </header>
 
