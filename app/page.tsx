@@ -9,6 +9,7 @@ import {
   LockKeyIcon,
   ArrowRight01Icon,
   Tick02Icon,
+  Login02Icon,
 } from '@hugeicons/core-free-icons';
 
 const FEATURES = [
@@ -54,36 +55,13 @@ export default async function HomePage() {
             <span className="text-xl font-bold tracking-tight text-[#182820]">TaskFlow</span>
           </Link>
 
-          <nav className="hidden items-center gap-6 md:flex">
-            {[
-              { label: 'Funcionalidades', href: '#features' },
-              { label: 'Precios', href: '#pricing' },
-              { label: 'Empresas', href: '#enterprise' },
-            ].map(({ label, href }) => (
-              <Link
-                key={label}
-                href={href}
-                className="text-xs font-semibold uppercase tracking-wider text-[#0b1c30] transition-colors hover:text-[#4b41e1]"
-              >
-                {label}
-              </Link>
-            ))}
-          </nav>
+        
 
-          <div className="flex items-center gap-4">
-            <Link
-              href="/login"
-              className="hidden text-xs font-semibold uppercase tracking-wider text-[#0b1c30] transition-colors hover:text-[#4b41e1] sm:inline-block"
-            >
-              Iniciar sesión
+          <Button asChild variant="ghost" size="icon" className="h-9 w-9 text-[#0b1c30] hover:bg-[#e5eeff] hover:text-[#4b41e1]">
+            <Link href="/login" aria-label="Iniciar sesión">
+              <HugeiconsIcon icon={Login02Icon} size={20} />
             </Link>
-            <Button
-              asChild
-              className="h-auto rounded bg-[#182820] px-6 py-2 text-xs font-semibold uppercase tracking-wider text-white hover:bg-[#516258]"
-            >
-              <Link href="/signup">Registrarse</Link>
-            </Button>
-          </div>
+          </Button>
         </div>
       </header>
 
@@ -127,10 +105,11 @@ export default async function HomePage() {
                 </Link>
               </Button>
               <Button
+                asChild
                 variant="outline"
                 className="h-auto w-full rounded border-[#737874] px-10 py-3 text-xs font-semibold uppercase tracking-wider text-[#4b41e1] transition-all hover:bg-[#eff4ff] active:scale-95 sm:w-auto"
               >
-                Solicitar demo
+                <Link href="/login">Iniciar sesión</Link>
               </Button>
             </div>
           </div>
