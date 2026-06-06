@@ -18,13 +18,13 @@ export function Logo({
   size = 'md',
   textClassName,
   containerClassName,
-  iconSize = 20,
+  iconSize = 16,
   iconStroke = 2.5,
 }: LogoProps) {
   const sizeMap = {
-    sm: { box: 'h-6 w-6', text: 'text-base' },
-    md: { box: 'h-9 w-9', text: 'text-xl' },
-    lg: { box: 'h-12 w-12', text: 'text-2xl' },
+    sm: { box: 'h-5 w-5', text: 'text-sm' },
+    md: { box: 'h-6 w-6', text: 'text-base' },
+    lg: { box: 'h-7 w-7', text: 'text-lg' },
   };
 
   const logoIcon = (

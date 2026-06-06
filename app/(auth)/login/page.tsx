@@ -22,7 +22,7 @@ export default function LoginPage() {
 
         <div className='relative z-10'>
           <div className='mb-8'>
-            <Logo href="/" showText={false} size="lg" />
+            <Logo href="/" showText={true} size="lg" />
           </div>
           <div>
             <h2 className='text-2xl font-semibold text-foreground mb-3'>
@@ -47,7 +47,7 @@ export default function LoginPage() {
       <div className='flex flex-col justify-center px-4 py-8 md:px-10 lg:px-12'>
         {/* Mobile Logo */}
         <div className='flex justify-center mb-8 lg:hidden'>
-          <Logo href="/" showText={false} size="md" />
+          <Logo href="/" showText={true} size="md" />
         </div>
 
         <div className='w-full max-w-sm mx-auto'>
