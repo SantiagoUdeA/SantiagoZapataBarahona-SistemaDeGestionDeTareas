@@ -23,7 +23,7 @@ export async function TasksList({ projectId, userId, isAdmin }: TasksListProps) 
   const tasks = await getTasks(projectId, userId, isAdmin)
 
   if (tasks === null) {
-    return <p className='text-muted-foreground'>No tenés acceso a este proyecto.</p>
+    return <p className='text-muted-foreground'>No tienes acceso a este proyecto.</p>
   }
 
   const progress = calculateProgress(tasks)

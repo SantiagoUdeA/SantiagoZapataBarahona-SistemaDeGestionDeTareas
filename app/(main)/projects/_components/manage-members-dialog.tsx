@@ -109,7 +109,7 @@ export function ManageMembersDialog({ projectId, projectName }: ManageMembersDia
         <DialogHeader>
           <DialogTitle>Gestionar miembros — {projectName}</DialogTitle>
           <DialogDescription>
-            Asigná usuarios al proyecto para que puedan colaborar en las tareas. 
+            Asigna usuarios al proyecto para que puedan colaborar en las tareas. 
           </DialogDescription>
         </DialogHeader>
 

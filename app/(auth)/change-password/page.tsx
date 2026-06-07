@@ -43,7 +43,7 @@ export default function ChangePasswordPage() {
     });
 
     if (error) {
-      setError('No se pudo actualizar la contraseña. Intentá nuevamente.');
+      setError('No se pudo actualizar la contraseña. Intenta nuevamente.');
       setIsLoading(false);
       return;
     }
@@ -58,9 +58,9 @@ export default function ChangePasswordPage() {
 
       <form onSubmit={handleSubmit} className='w-full max-w-sm flex flex-col gap-6'>
         <div className='flex flex-col gap-2 text-center'>
-          <h1 className='text-2xl font-semibold tracking-tight'>Actualizá tu contraseña</h1>
+          <h1 className='text-2xl font-semibold tracking-tight'>Actualiza tu contraseña</h1>
           <p className='text-sm text-muted-foreground'>
-            Por seguridad, debés establecer una nueva contraseña antes de continuar.
+            Por seguridad, debes establecer una nueva contraseña antes de continuar.
           </p>
         </div>
 

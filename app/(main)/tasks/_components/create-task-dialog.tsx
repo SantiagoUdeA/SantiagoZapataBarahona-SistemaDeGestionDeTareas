@@ -58,7 +58,7 @@ export function CreateTaskDialog({ projectId }: CreateTaskDialogProps) {
       return
     }
     if (!assigneeId) {
-      toast.error('Elegí un responsable para la tarea')
+      toast.error('Elige un responsable para la tarea')
       return
     }
 
@@ -93,7 +93,7 @@ export function CreateTaskDialog({ projectId }: CreateTaskDialogProps) {
         <DialogHeader>
           <DialogTitle>Crear nueva tarea</DialogTitle>
           <DialogDescription>
-            Describí la tarea y elegí a la persona responsable. Quedará en estado pendiente.
+            Describe la tarea y elige a la persona responsable. Quedará en estado pendiente.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className='space-y-4'>
@@ -101,7 +101,7 @@ export function CreateTaskDialog({ projectId }: CreateTaskDialogProps) {
             <Label htmlFor='title'>Título</Label>
             <Input
               id='title'
-              placeholder='Describí la tarea'
+              placeholder='Describe la tarea'
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               disabled={pending}
@@ -111,7 +111,7 @@ export function CreateTaskDialog({ projectId }: CreateTaskDialogProps) {
             <Label htmlFor='assignee'>Responsable</Label>
             <Select value={assigneeId} onValueChange={setAssigneeId} disabled={loading || pending}>
               <SelectTrigger id='assignee' className='w-full'>
-                <SelectValue placeholder='Seleccioná un responsable' />
+                <SelectValue placeholder='Selecciona un responsable' />
               </SelectTrigger>
               <SelectContent>
                 {profiles.length === 0 && (

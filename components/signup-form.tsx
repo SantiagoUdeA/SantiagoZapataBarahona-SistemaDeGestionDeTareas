@@ -68,7 +68,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<'form'>
             <HugeiconsIcon icon={CircleCheckIcon} className='h-8 w-8 text-[#2D3E35]' />
           </div>
           <div className='flex flex-col gap-2'>
-            <h2 className='text-2xl font-semibold text-[#2D3E35]'>Verificá tu correo</h2>
+            <h2 className='text-2xl font-semibold text-[#2D3E35]'>Verifica tu correo</h2>
             <p className='text-sm text-[#434844]'>
               Te enviamos un enlace de verificación a <strong>{email}</strong>. Revisá tu bandeja de entrada (y también tu carpeta de spam).
             </p>
@@ -86,7 +86,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<'form'>
       <div className='flex flex-col gap-2 text-center lg:text-left'>
         <h1 className='text-3xl font-semibold tracking-tight'>Crear cuenta</h1>
         <p className='text-sm text-muted-foreground'>
-          Unete a TaskFlow para gestionar tus proyectos con precisión.
+          Únete a TaskFlow para gestionar tus proyectos con precisión.
         </p>
       </div>
 
@@ -203,7 +203,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<'form'>
         <p className='text-center text-sm text-muted-foreground'>
           ¿Ya tienes cuenta?{' '}
           <Link href='/login' className='text-primary hover:underline font-medium'>
-            Iniciá sesión
+            Inicia sesión
           </Link>
         </p>
       </div>

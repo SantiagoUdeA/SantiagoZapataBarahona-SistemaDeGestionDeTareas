@@ -13,7 +13,7 @@ export default async function UsersPage() {
         <div>
           <h2 className='text-2xl font-bold tracking-tight'>Gestión de usuarios</h2>
           <p className='text-muted-foreground'>
-            Gestioná el acceso al sistema y los roles de toda la organización.
+            Gestiona el acceso al sistema y los roles de toda la organización.
           </p>
         </div>
         <CreateUserDialog />

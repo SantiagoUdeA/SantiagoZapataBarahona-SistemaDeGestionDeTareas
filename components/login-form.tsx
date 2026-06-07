@@ -36,7 +36,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'form'>)
     });
 
     if (error) {
-      setError('Credenciales inválidas. Verificá tu email y contraseña.');
+      setError('Credenciales inválidas. Verifica tu email y contraseña.');
       setIsLoading(false);
       return;
     }
@@ -50,7 +50,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'form'>)
       <div className='flex flex-col gap-2 text-center lg:text-left'>
         <h1 className='text-3xl font-semibold tracking-tight'>Bienvenido</h1>
         <p className='text-sm text-muted-foreground'>
-          Ingresá tus credenciales para acceder a la aplicación
+          Ingresa tus credenciales para acceder a la aplicación
         </p>
       </div>
 
@@ -133,7 +133,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'form'>)
         </Button>
 
         <p className='text-center text-sm text-muted-foreground'>
-          ¿No tenés cuenta?{' '}
+          ¿No tienes cuenta?{' '}
           <a href='/signup' className='text-primary hover:underline font-medium'>
             Solicitar acceso
           </a>

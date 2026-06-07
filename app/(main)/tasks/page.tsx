@@ -34,7 +34,7 @@ export default async function TasksPage({ searchParams }: TasksPageProps) {
         <div>
           <h2 className='text-2xl font-bold tracking-tight'>Tareas</h2>
           <p className='text-muted-foreground'>
-            {user.role === 'ADMIN' ? 'Gestiona las tareas de tus proyectos aquí.' : 'Consultá y avanzá tus tareas aquí.'}
+            {user.role === 'ADMIN' ? 'Gestiona las tareas de tus proyectos aquí.' : 'Consulta y avanza tus tareas aquí.'}
           </p>
         </div>
         {selectedProjectId && (
@@ -55,7 +55,7 @@ export default async function TasksPage({ searchParams }: TasksPageProps) {
         </div>
       ) : (
         <div className='rounded-md border border-dashed p-10 text-center text-muted-foreground'>
-          Elegí un proyecto para ver sus tareas.
+          Elige un proyecto para ver sus tareas.
         </div>
       )}
     </div>

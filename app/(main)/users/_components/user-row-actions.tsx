@@ -81,7 +81,7 @@ export function UserRowActions({ userId, email, enabled }: UserRowActionsProps) 
           <AlertDialogHeader>
             <AlertDialogTitle>Eliminar usuario</AlertDialogTitle>
             <AlertDialogDescription>
-              ¿Estás seguro de que querés eliminar a "{email}"? Esta acción no se puede deshacer.
+              ¿Estás seguro de que quieres eliminar a "{email}"? Esta acción no se puede deshacer.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

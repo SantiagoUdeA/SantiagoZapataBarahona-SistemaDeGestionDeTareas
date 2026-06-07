@@ -16,13 +16,13 @@ const FEATURES = [
     icon: FlashIcon,
     title: 'Velocidad sin concesiones',
     description:
-      'Diseñado para respuesta inmediata. Navegá, creá y actualizá tareas sin fricciones ni demoras.',
+      'Diseñado para respuesta inmediata. Navega, crea y actualiza tareas sin fricciones ni demoras.',
   },
   {
     icon: Analytics01Icon,
     title: 'Insights profundos',
     description:
-      'Convertí flujos de trabajo caóticos en datos estructurados y accionables con reportes inteligentes.',
+      'Convierte flujos de trabajo caóticos en datos estructurados y accionables con reportes inteligentes.',
   },
   {
     icon: LockKeyIcon,

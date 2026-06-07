@@ -24,11 +24,11 @@ export function ProjectSelector({ projects, selected }: ProjectSelectorProps) {
   return (
     <Select value={selected} onValueChange={handleChange}>
       <SelectTrigger className='w-full'>
-        <SelectValue placeholder='Seleccioná un proyecto' />
+        <SelectValue placeholder='Selecciona un proyecto' />
       </SelectTrigger>
       <SelectContent>
         {projects.length === 0 && (
-          <div className='px-2 py-1.5 text-sm text-muted-foreground'>No tenés proyectos disponibles</div>
+          <div className='px-2 py-1.5 text-sm text-muted-foreground'>No tienes proyectos disponibles</div>
         )}
         {projects.map((project) => (
           <SelectItem key={project.id} value={project.id}>
