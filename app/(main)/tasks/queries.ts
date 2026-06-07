@@ -40,6 +40,7 @@ export async function getTasks(projectId: string, userId: string, isAdmin: boole
   return tasks.map((task) => ({
     id: task.id,
     title: task.title,
+    description: task.description,
     status: task.status,
     createdAt: task.createdAt,
     completedAt: task.completedAt,
@@ -69,13 +70,23 @@ export async function getProgressOverTime(projectId: string) {
     .map((t) => t.completedAt.toISOString().slice(0, 10))
     .sort()
 
+  if (completions.length === 0) return []
+
   const byDay = new Map<string, number>()
   for (const day of completions) {
     byDay.set(day, (byDay.get(day) ?? 0) + 1)
   }
 
+  // Punto base en 0% el día previo a la primera completada: garantiza al menos
+  // dos puntos para que el área se dibuje y se actualice aunque todas las tareas
+  // se completen el mismo día.
+  const baseline = new Date(completions[0])
+  baseline.setUTCDate(baseline.getUTCDate() - 1)
+  const series: Array<{ date: string; progress: number }> = [
+    { date: baseline.toISOString().slice(0, 10), progress: 0 },
+  ]
+
   let accumulated = 0
-  const series: Array<{ date: string; progress: number }> = []
   for (const [date, count] of byDay) {
     accumulated += count
     series.push({ date, progress: Math.round((accumulated / total) * 100) })

@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { getSession } from '@/lib/auth/guard'
 import {
   createTask as createTaskAction,
+  updateTask as updateTaskAction,
   updateTaskStatus as updateTaskStatusAction,
   getAssignableProfiles as getAssignableProfilesAction,
 } from '@/app/(main)/tasks/actions'
@@ -40,9 +41,22 @@ export const createTask = tool({
     projectId: z.string().uuid(),
     title: z.string().min(1).max(500),
     assigneeId: z.string().uuid(),
+    description: z.string().optional(),
   }),
-  execute: async ({ projectId, title, assigneeId }) => {
-    return createTaskAction(projectId, title, assigneeId)
+  execute: async ({ projectId, title, assigneeId, description }) => {
+    return createTaskAction(projectId, title, assigneeId, description ?? '')
+  },
+})
+
+export const updateTask = tool({
+  description: 'Edita el título y la descripción de una tarea. El usuario debe ser assignee, owner del proyecto o admin.',
+  inputSchema: z.object({
+    taskId: z.string().uuid(),
+    title: z.string().min(1).max(500),
+    description: z.string(),
+  }),
+  execute: async ({ taskId, title, description }) => {
+    return updateTaskAction(taskId, title, description)
   },
 })
 

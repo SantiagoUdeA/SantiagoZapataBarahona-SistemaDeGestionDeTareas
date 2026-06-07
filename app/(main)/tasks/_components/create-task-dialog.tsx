@@ -5,6 +5,7 @@ import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
 import {
   Select,
   SelectContent,
@@ -32,6 +33,7 @@ interface CreateTaskDialogProps {
 export function CreateTaskDialog({ projectId }: CreateTaskDialogProps) {
   const [open, setOpen] = useState(false)
   const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('')
   const [assigneeId, setAssigneeId] = useState('')
   const [profiles, setProfiles] = useState<Profile[]>([])
   const [loading, setLoading] = useState(false)
@@ -64,12 +66,13 @@ export function CreateTaskDialog({ projectId }: CreateTaskDialogProps) {
 
     setPending(true)
     try {
-      const result = await createTask(projectId, title, assigneeId)
+      const result = await createTask(projectId, title, assigneeId, description)
       if (result.error) {
         toast.error(result.error)
       } else {
         toast.success('Tarea creada')
         setTitle('')
+        setDescription('')
         setAssigneeId('')
         setOpen(false)
       }
@@ -104,6 +107,16 @@ export function CreateTaskDialog({ projectId }: CreateTaskDialogProps) {
               placeholder='Describe la tarea'
               value={title}
               onChange={(e) => setTitle(e.target.value)}
+              disabled={pending}
+            />
+          </div>
+          <div className='space-y-2'>
+            <Label htmlFor='description'>Descripción</Label>
+            <Textarea
+              id='description'
+              placeholder='Agrega una descripción para la tarea (opcional)'
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
               disabled={pending}
             />
           </div>

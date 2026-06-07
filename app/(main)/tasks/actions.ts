@@ -41,7 +41,7 @@ export async function getAssignableProfiles(projectId: string) {
   return { profiles: members.map((m) => m.profile) }
 }
 
-export async function createTask(projectId: string, title: string, assigneeId: string) {
+export async function createTask(projectId: string, title: string, assigneeId: string, description: string = '') {
   const session = await getSession()
   if (!session) {
     return { error: 'No autorizado' }
@@ -68,6 +68,7 @@ export async function createTask(projectId: string, title: string, assigneeId: s
     const task = await prisma.task.create({
       data: {
         title: title.trim(),
+        description: description.trim() || null,
         projectId,
         assigneeId,
         createdById: session.id,
@@ -77,6 +78,47 @@ export async function createTask(projectId: string, title: string, assigneeId: s
     return { id: task.id }
   } catch (err) {
     return { error: 'Error al crear la tarea' }
+  }
+}
+
+export async function updateTask(taskId: string, title: string, description: string) {
+  const session = await getSession()
+  if (!session) {
+    return { error: 'No autorizado' }
+  }
+
+  if (!title.trim()) {
+    return { error: 'El título es requerido' }
+  }
+
+  try {
+    const task = await prisma.task.findUnique({
+      where: { id: taskId },
+      select: { id: true, assigneeId: true, project: { select: { createdBy: true } } },
+    })
+
+    if (!task) {
+      return { error: 'Tarea no encontrada' }
+    }
+
+    const isAdmin = session.role === 'ADMIN'
+    const isAssignee = task.assigneeId === session.id
+    const isOwner = task.project.createdBy === session.id
+    if (!isAssignee && !isOwner && !isAdmin) {
+      return { error: 'No autorizado' }
+    }
+
+    const updated = await prisma.task.update({
+      where: { id: taskId },
+      data: { title: title.trim(), description: description.trim() || null },
+    })
+    revalidatePath('/tasks')
+    return { id: updated.id }
+  } catch (err: any) {
+    if (err.code === 'P2025') {
+      return { error: 'Tarea no encontrada' }
+    }
+    return { error: 'Error al actualizar la tarea' }
   }
 }
 

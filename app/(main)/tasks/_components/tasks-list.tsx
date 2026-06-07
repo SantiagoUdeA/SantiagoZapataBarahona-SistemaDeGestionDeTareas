@@ -7,11 +7,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { getTasks, calculateProgress } from '../queries'
-import { TaskStatusControl } from './task-status-control'
-
-function formatDate(date: Date) {
-  return new Intl.DateTimeFormat('es', { day: '2-digit', month: '2-digit', year: 'numeric' }).format(date)
-}
+import { TaskRow } from './task-row'
 
 interface TasksListProps {
   projectId: string
@@ -61,25 +57,7 @@ export async function TasksList({ projectId, userId, isAdmin }: TasksListProps) 
           )}
           {tasks.map((task) => {
             const canAdvance = isAdmin || task.assignee.id === userId
-            return (
-              <TableRow key={task.id}>
-                <TableCell className='text-xs text-muted-foreground font-mono'>
-                  {task.id.substring(0, 8)}
-                </TableCell>
-                <TableCell className='font-medium'>{task.title}</TableCell>
-                <TableCell className='text-sm'>{task.assignee.fullName || 'Sin nombre'}</TableCell>
-                <TableCell className='text-sm text-muted-foreground'>
-                  {task.createdBy.fullName || 'Sin nombre'}
-                  {task.completedBy && (
-                    <div className='text-xs'>Completada por {task.completedBy.fullName || 'Sin nombre'}</div>
-                  )}
-                </TableCell>
-                <TableCell>
-                  <TaskStatusControl taskId={task.id} status={task.status} canAdvance={canAdvance} />
-                </TableCell>
-                <TableCell className='text-sm text-muted-foreground'>{formatDate(task.createdAt)}</TableCell>
-              </TableRow>
-            )
+            return <TaskRow key={task.id} task={task} canAdvance={canAdvance} />
           })}
         </TableBody>
       </Table>

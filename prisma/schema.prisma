@@ -71,6 +71,7 @@ model ProjectMember {
 model Task {
   id          String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   title       String
+  description String?
   status      Enum_TaskStatus @default(PENDING)
   projectId   String          @db.Uuid
   project     Project         @relation(fields: [projectId], references: [id], onDelete: Cascade)
