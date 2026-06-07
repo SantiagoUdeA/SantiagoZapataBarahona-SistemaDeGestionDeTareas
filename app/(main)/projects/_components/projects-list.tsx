@@ -20,7 +20,7 @@ export async function ProjectsList({ userId, isAdmin }: { userId: string; isAdmi
           <TableHead>Nombre</TableHead>
           <TableHead>Progreso</TableHead>
           <TableHead>Creado por</TableHead>
-          <TableHead>Acciones</TableHead>
+          {isAdmin && <TableHead>Acciones</TableHead>}
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -44,9 +44,11 @@ export async function ProjectsList({ userId, isAdmin }: { userId: string; isAdmi
               </div>
             </TableCell>
             <TableCell className='text-sm'>{project.owner.fullName || 'Unknown'}</TableCell>
-            <TableCell>
-              <ProjectRowActions project={project} isAdmin={isAdmin} />
-            </TableCell>
+            {isAdmin && (
+              <TableCell>
+                <ProjectRowActions project={project} isAdmin={isAdmin} />
+              </TableCell>
+            )}
           </TableRow>
         ))}
       </TableBody>
