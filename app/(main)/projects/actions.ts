@@ -9,6 +9,9 @@ export async function createProject(name: string) {
   if (!session) {
     return { error: 'Unauthorized' }
   }
+  if (session.role !== 'ADMIN') {
+    return { error: 'Unauthorized' }
+  }
 
   try {
     const project = await prisma.project.create({

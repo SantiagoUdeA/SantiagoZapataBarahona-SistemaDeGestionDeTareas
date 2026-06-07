@@ -18,6 +18,8 @@ El sistema DEBE mostrar las tareas de un proyecto seleccionado, indicando identi
 ### Requirement: Creación y asignación de una tarea
 El sistema DEBE permitir crear una tarea dentro del proyecto seleccionado y asignarla a un usuario responsable, dejándola en estado pendiente.
 
+# RULE: Se debe registrar el nombre de quien creó la tarea
+
 #### Scenario: Creación y asignación exitosa de una tarea
 - GIVEN un usuario autenticado describe una tarea dentro de un proyecto y elige al responsable
 - WHEN el usuario registra la tarea
@@ -48,6 +50,7 @@ El sistema DEBE permitir avanzar una tarea por los estados pendiente, en progres
 - GIVEN una tarea en estado pendiente o en progreso
 - WHEN el responsable de la tarea la marca como completada
 - THEN el sistema registra la tarea como completada
+- AND se registra el nombre de quien completó la tarea
 
 ---
 

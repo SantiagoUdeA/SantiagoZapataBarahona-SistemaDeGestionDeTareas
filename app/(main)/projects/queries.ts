@@ -1,8 +1,10 @@
 import prisma from '@/lib/prisma'
 
-export async function getProjects(userId: string) {
+export async function getProjects(userId: string, isAdmin: boolean) {
   const projects = await prisma.project.findMany({
-    where: { createdBy: userId },
+    where: isAdmin
+      ? { createdBy: userId }
+      : { members: { some: { profileId: userId } } },
     include: {
       owner: { select: { id: true, fullName: true, avatarUrl: true } },
       tasks: { select: { status: true } },

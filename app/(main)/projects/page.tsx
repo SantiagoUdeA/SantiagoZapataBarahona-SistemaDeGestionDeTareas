@@ -21,9 +21,9 @@ export default async function ProjectsPage() {
       <div className='flex items-center justify-between mb-8'>
         <div>
           <h2 className='text-2xl font-bold tracking-tight'>Projects</h2>
-          <p className='text-muted-foreground'>Manage your projects here.</p>
+          <p className='text-muted-foreground'>{user.role === 'ADMIN' ? 'Manage your projects here.' : 'View your projects here.'}</p>
         </div>
-        <CreateProjectDialog />
+        {session.role === 'ADMIN' && <CreateProjectDialog />}
       </div>
       <Suspense fallback={<ProjectsSkeleton />}>
         <ProjectsList userId={session.id} isAdmin={session.role === 'ADMIN'} />

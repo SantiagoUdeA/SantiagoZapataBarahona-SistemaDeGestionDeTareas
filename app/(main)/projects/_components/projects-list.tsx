@@ -10,7 +10,7 @@ import { getProjects } from '../queries'
 import { ProjectRowActions } from './project-row-actions'
 
 export async function ProjectsList({ userId, isAdmin }: { userId: string; isAdmin: boolean }) {
-  const projects = await getProjects(userId)
+  const projects = await getProjects(userId, isAdmin)
 
   return (
     <Table>
