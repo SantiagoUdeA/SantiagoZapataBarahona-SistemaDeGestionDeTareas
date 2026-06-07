@@ -7,7 +7,8 @@ You have to use caveman in ultra mode
 
 - If you are crafting or modifying UI you MUST read @DESIGN.md
 - ALWAYS adpat the UI to shadcn components `components/ui`
-- For UI text, always use Neutral Spanish
+- For UI text, always use Neutral Spanish.
+- No uses expresiones como "escribí", "seleccioná" ó "consultá". Debe ser neutro, entonces usa "escribe", "selecciona" y "consulta" 
 
 
 <!-- BEGIN:nextjs-agent-rules -->
