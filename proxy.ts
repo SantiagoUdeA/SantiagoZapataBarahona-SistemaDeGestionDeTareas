@@ -21,7 +21,17 @@ export async function proxy(request: NextRequest) {
     }
   )
 
-  await supabase.auth.getUser()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  const pathname = request.nextUrl.pathname
+  const exemptPaths = ['/change-password', '/login', '/signup', '/auth', '/api']
+  const isExempt = exemptPaths.some((path) => pathname.startsWith(path))
+
+  if (user?.user_metadata?.must_change_password === true && !isExempt) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/change-password'
+    return NextResponse.redirect(url)
+  }
 
   return response
 }
