@@ -7,14 +7,14 @@ export default async function ProfilePage() {
 
   if (!session) {
     return (
-      <div className="container mx-auto py-10">
+      <div className="container mx-auto px-6 py-8">
         <p className="text-muted-foreground">Error loading session</p>
       </div>
     )
   }
 
   return (
-    <div className="container mx-auto py-10">
+    <div className="container mx-auto px-6 py-8">
       <div className="mb-8">
         <h1 className="text-2xl font-bold tracking-tight">Edit Profile</h1>
         <p className="text-muted-foreground">Update your profile information</p>
