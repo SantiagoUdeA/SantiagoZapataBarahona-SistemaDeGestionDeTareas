@@ -9,7 +9,7 @@ import {
 import { getProjects } from '../queries'
 import { ProjectRowActions } from './project-row-actions'
 
-export async function ProjectsList({ userId }: { userId: string }) {
+export async function ProjectsList({ userId, isAdmin }: { userId: string; isAdmin: boolean }) {
   const projects = await getProjects(userId)
 
   return (
@@ -45,7 +45,7 @@ export async function ProjectsList({ userId }: { userId: string }) {
             </TableCell>
             <TableCell className='text-sm'>{project.owner.fullName || 'Unknown'}</TableCell>
             <TableCell>
-              <ProjectRowActions project={project} />
+              <ProjectRowActions project={project} isAdmin={isAdmin} />
             </TableCell>
           </TableRow>
         ))}

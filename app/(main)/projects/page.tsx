@@ -17,7 +17,7 @@ export default async function ProjectsPage() {
   }
 
   return (
-    <div className='container mx-auto py-10'>
+    <div className='container mx-auto px-6 py-8'>
       <div className='flex items-center justify-between mb-8'>
         <div>
           <h2 className='text-2xl font-bold tracking-tight'>Projects</h2>
@@ -26,7 +26,7 @@ export default async function ProjectsPage() {
         <CreateProjectDialog />
       </div>
       <Suspense fallback={<ProjectsSkeleton />}>
-        <ProjectsList userId={session.id} />
+        <ProjectsList userId={session.id} isAdmin={session.role === 'ADMIN'} />
       </Suspense>
     </div>
   )

@@ -50,6 +50,33 @@ export async function updateProject(id: string, name: string) {
   }
 }
 
+export async function getProjectMembers(projectId: string) {
+  const session = await getSession()
+  if (!session || session.role !== 'ADMIN') {
+    return { error: 'Unauthorized' }
+  }
+
+  const [members, assignable] = await Promise.all([
+    prisma.projectMember.findMany({
+      where: { projectId },
+      include: { profile: { select: { id: true, fullName: true, avatarUrl: true } } },
+      orderBy: { createdAt: 'asc' },
+    }),
+    prisma.profile.findMany({
+      where: { deleted: false, enabled: true },
+      select: { id: true, fullName: true, avatarUrl: true },
+      orderBy: { fullName: 'asc' },
+    }),
+  ])
+
+  const memberIds = new Set(members.map((m) => m.profileId))
+
+  return {
+    members: members.map((m) => m.profile),
+    assignable: assignable.filter((profile) => !memberIds.has(profile.id)),
+  }
+}
+
 export async function deleteProject(id: string) {
   const session = await getSession()
   if (!session) {
