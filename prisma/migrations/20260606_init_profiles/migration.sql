@@ -22,6 +22,8 @@ DROP TYPE IF EXISTS "Enum_PaymentStatus";
 -- CreateEnum
 CREATE TYPE public."Enum_Role" AS ENUM ('ADMIN', 'USER');
 
+CREATE TYPE public."Enum_TaskStatus" AS ENUM ('PENDING', 'IN_PROGRESS', 'COMPLETED');
+
 -- CreateTable profiles
 CREATE TABLE public.profiles (
     id uuid NOT NULL PRIMARY KEY,
@@ -43,7 +45,6 @@ CREATE UNIQUE INDEX profiles_username_key ON public.profiles(username);
 CREATE TABLE public.projects (
     id uuid NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
     name text NOT NULL,
-    progress integer NOT NULL DEFAULT 0,
     "createdBy" uuid NOT NULL,
     "createdAt" timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" timestamp(3) NOT NULL,
@@ -53,17 +54,20 @@ CREATE TABLE public.projects (
 -- CreateIndex
 CREATE INDEX projects_createdBy_idx ON public.projects("createdBy");
 
--- CreateTable project_members
-CREATE TABLE public.project_members (
+-- CreateTable tasks
+CREATE TABLE public.tasks (
     id uuid NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
+    title text NOT NULL,
+    status public."Enum_TaskStatus" NOT NULL DEFAULT 'PENDING',
     "projectId" uuid NOT NULL,
-    "userId" uuid NOT NULL,
-    "joinedAt" timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT project_members_projectId_fkey FOREIGN KEY ("projectId") REFERENCES public.projects(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT project_members_userId_fkey FOREIGN KEY ("userId") REFERENCES public.profiles(id) ON DELETE CASCADE ON UPDATE CASCADE
+    "assigneeId" uuid NOT NULL,
+    "completedAt" timestamp(3),
+    "createdAt" timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" timestamp(3) NOT NULL,
+    CONSTRAINT tasks_projectId_fkey FOREIGN KEY ("projectId") REFERENCES public.projects(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT tasks_assigneeId_fkey FOREIGN KEY ("assigneeId") REFERENCES public.profiles(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX project_members_projectId_userId_key ON public.project_members("projectId", "userId");
-CREATE INDEX project_members_projectId_idx ON public.project_members("projectId");
-CREATE INDEX project_members_userId_idx ON public.project_members("userId");
+CREATE INDEX tasks_projectId_idx ON public.tasks("projectId");
+CREATE INDEX tasks_assigneeId_idx ON public.tasks("assigneeId");
