@@ -7,10 +7,10 @@ import prisma from '@/lib/prisma'
 export async function createProject(name: string) {
   const session = await getSession()
   if (!session) {
-    return { error: 'Unauthorized' }
+    return { error: 'No autorizado' }
   }
   if (session.role !== 'ADMIN') {
-    return { error: 'Unauthorized' }
+    return { error: 'No autorizado' }
   }
 
   try {
@@ -18,25 +18,28 @@ export async function createProject(name: string) {
       data: {
         name: name.trim(),
         createdBy: session.id,
+        members: {
+          create: { profileId: session.id },
+        },
       },
     })
     revalidatePath('/projects')
     return { id: project.id }
   } catch (err) {
-    return { error: 'Failed to create project' }
+    return { error: 'Error al crear el proyecto' }
   }
 }
 
 export async function updateProject(id: string, name: string) {
   const session = await getSession()
   if (!session) {
-    return { error: 'Unauthorized' }
+    return { error: 'No autorizado' }
   }
 
   try {
     const project = await prisma.project.findUnique({ where: { id } })
     if (!project || project.createdBy !== session.id) {
-      return { error: 'Unauthorized' }
+      return { error: 'No autorizado' }
     }
 
     const updated = await prisma.project.update({
@@ -47,16 +50,16 @@ export async function updateProject(id: string, name: string) {
     return { id: updated.id }
   } catch (err: any) {
     if (err.code === 'P2025') {
-      return { error: 'Project not found' }
+      return { error: 'Proyecto no encontrado' }
     }
-    return { error: 'Failed to update project' }
+    return { error: 'Error al actualizar el proyecto' }
   }
 }
 
 export async function getProjectMembers(projectId: string) {
   const session = await getSession()
   if (!session || session.role !== 'ADMIN') {
-    return { error: 'Unauthorized' }
+    return { error: 'No autorizado' }
   }
 
   const [members, assignable] = await Promise.all([
@@ -66,7 +69,7 @@ export async function getProjectMembers(projectId: string) {
       orderBy: { createdAt: 'asc' },
     }),
     prisma.profile.findMany({
-      where: { deleted: false, enabled: true },
+      where: { deleted: false, enabled: true, id: { not: session.id } },
       select: { id: true, fullName: true, avatarUrl: true },
       orderBy: { fullName: 'asc' },
     }),
@@ -83,13 +86,13 @@ export async function getProjectMembers(projectId: string) {
 export async function deleteProject(id: string) {
   const session = await getSession()
   if (!session) {
-    return { error: 'Unauthorized' }
+    return { error: 'No autorizado' }
   }
 
   try {
     const project = await prisma.project.findUnique({ where: { id } })
     if (!project || project.createdBy !== session.id) {
-      return { error: 'Unauthorized' }
+      return { error: 'No autorizado' }
     }
 
     await prisma.project.delete({ where: { id } })
@@ -97,8 +100,8 @@ export async function deleteProject(id: string) {
     return { success: true }
   } catch (err: any) {
     if (err.code === 'P2025') {
-      return { error: 'Project not found' }
+      return { error: 'Proyecto no encontrado' }
     }
-    return { error: 'Failed to delete project' }
+    return { error: 'Error al eliminar el proyecto' }
   }
 }
