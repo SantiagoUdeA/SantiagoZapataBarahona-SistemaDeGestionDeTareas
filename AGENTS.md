@@ -7,6 +7,7 @@ You have to use caveman in ultra mode
 
 - If you are crafting or modifying UI you MUST read @DESIGN.md
 - ALWAYS adpat the UI to shadcn components `components/ui`
+- For UI text, always use Neutral Spanish
 
 
 <!-- BEGIN:nextjs-agent-rules -->

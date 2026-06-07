@@ -14,7 +14,7 @@ import { HugeiconsIcon } from '@hugeicons/react';
 import { DashboardSquare01Icon, CommandIcon, Folder01Icon, UserGroupIcon, Settings05Icon, HelpCircleIcon, SearchIcon } from '@hugeicons/core-free-icons';
 import { NavSecondary } from '@/components/nav-secondary';
 
-const navItems = [
+const baseNavItems = [
   {
     title: 'Dashboard',
     url: '/dashboard',
@@ -30,6 +30,9 @@ const navItems = [
     url: '/tasks',
     icon: <HugeiconsIcon icon={CommandIcon} strokeWidth={2} />,
   },
+];
+
+const adminNavItems = [
   {
     title: 'Usuarios',
     url: '/users',
@@ -39,6 +42,8 @@ const navItems = [
 
 export async function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const user = await getSession();
+
+  const navItems = user?.role === 'ADMIN' ? [...baseNavItems, ...adminNavItems] : baseNavItems;
 
   const sidebarUser = user
     ? {

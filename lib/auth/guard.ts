@@ -16,8 +16,11 @@ export async function requireAuth() {
 
 export async function requireRole(role: Enum_Role) {
   const session = await getSession();
-  if (!session || session.role !== role) {
+  if (!session) {
     redirect('/login');
+  }
+  if (session.role !== role) {
+    redirect('/dashboard');
   }
 
   return session;
