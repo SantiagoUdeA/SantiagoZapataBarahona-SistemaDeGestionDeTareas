@@ -17,10 +17,10 @@ export async function ProjectsList({ userId, isAdmin }: { userId: string; isAdmi
       <TableHeader>
         <TableRow>
           <TableHead>ID</TableHead>
-          <TableHead>Name</TableHead>
-          <TableHead>Progress</TableHead>
-          <TableHead>Created By</TableHead>
-          <TableHead>Actions</TableHead>
+          <TableHead>Nombre</TableHead>
+          <TableHead>Progreso</TableHead>
+          <TableHead>Creado por</TableHead>
+          <TableHead>Acciones</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>

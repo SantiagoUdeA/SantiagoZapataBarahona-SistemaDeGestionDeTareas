@@ -32,7 +32,7 @@ export function EditProjectDialog({
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!name.trim()) {
-      toast.error('Project name is required')
+      toast.error('El nombre del proyecto es requerido')
       return
     }
 
@@ -42,7 +42,7 @@ export function EditProjectDialog({
       if (result.error) {
         toast.error(result.error)
       } else {
-        toast.success('Project updated')
+        toast.success('Proyecto actualizado')
         setOpen(false)
       }
     } finally {
@@ -54,20 +54,20 @@ export function EditProjectDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant='outline' size='sm'>
-          Edit
+          Editar
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Edit Project</DialogTitle>
-          <DialogDescription>Update the project name.</DialogDescription>
+          <DialogTitle>Editar proyecto</DialogTitle>
+          <DialogDescription>Actualiza el nombre del proyecto.</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className='space-y-4'>
           <div className='space-y-2'>
-            <Label htmlFor='name'>Project Name</Label>
+            <Label htmlFor='name'>Nombre del proyecto</Label>
             <Input
               id='name'
-              placeholder='Enter project name'
+              placeholder='Ingresa el nombre del proyecto'
               value={name}
               onChange={(e) => setName(e.target.value)}
               disabled={pending}
@@ -80,10 +80,10 @@ export function EditProjectDialog({
               onClick={() => setOpen(false)}
               disabled={pending}
             >
-              Cancel
+              Cancelar
             </Button>
             <Button type='submit' disabled={pending}>
-              {pending ? 'Updating...' : 'Update'}
+              {pending ? 'Actualizando...' : 'Actualizar'}
             </Button>
           </DialogFooter>
         </form>

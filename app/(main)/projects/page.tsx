@@ -11,7 +11,7 @@ export default async function ProjectsPage() {
   if (!session?.id) {
     return (
       <div className='container mx-auto py-10'>
-        <p className='text-muted-foreground'>Error loading session</p>
+        <p className='text-muted-foreground'>Error cargando la sesión</p>
       </div>
     )
   }
@@ -20,8 +20,8 @@ export default async function ProjectsPage() {
     <div className='container mx-auto px-6 py-8'>
       <div className='flex items-center justify-between mb-8'>
         <div>
-          <h2 className='text-2xl font-bold tracking-tight'>Projects</h2>
-          <p className='text-muted-foreground'>{user.role === 'ADMIN' ? 'Manage your projects here.' : 'View your projects here.'}</p>
+          <h2 className='text-2xl font-bold tracking-tight'>Proyectos</h2>
+          <p className='text-muted-foreground'>{user.role === 'ADMIN' ? 'Gestiona tus proyectos aquí.' : 'Visualiza tus proyectos aquí.'}</p>
         </div>
         {session.role === 'ADMIN' && <CreateProjectDialog />}
       </div>

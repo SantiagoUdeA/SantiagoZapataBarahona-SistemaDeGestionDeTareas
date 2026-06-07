@@ -24,7 +24,7 @@ export function CreateProjectDialog() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!name.trim()) {
-      toast.error('Project name is required')
+      toast.error('El nombre del proyecto es requerido')
       return
     }
 
@@ -34,7 +34,7 @@ export function CreateProjectDialog() {
       if (result.error) {
         toast.error(result.error)
       } else {
-        toast.success('Project created')
+        toast.success('Proyecto creado')
         setName('')
         setOpen(false)
       }
@@ -46,21 +46,21 @@ export function CreateProjectDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Create Project</Button>
+        <Button>Crear proyecto</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create New Project</DialogTitle>
+          <DialogTitle>Crear nuevo proyecto</DialogTitle>
           <DialogDescription>
-            Enter a name for your new project.
+            Ingresa un nombre para tu nuevo proyecto.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className='space-y-4'>
           <div className='space-y-2'>
-            <Label htmlFor='name'>Project Name</Label>
+            <Label htmlFor='name'>Nombre del proyecto</Label>
             <Input
               id='name'
-              placeholder='Enter project name'
+              placeholder='Ingresa el nombre del proyecto'
               value={name}
               onChange={(e) => setName(e.target.value)}
               disabled={pending}
@@ -73,10 +73,10 @@ export function CreateProjectDialog() {
               onClick={() => setOpen(false)}
               disabled={pending}
             >
-              Cancel
+              Cancelar
             </Button>
             <Button type='submit' disabled={pending}>
-              {pending ? 'Creating...' : 'Create'}
+              {pending ? 'Creando...' : 'Crear'}
             </Button>
           </DialogFooter>
         </form>

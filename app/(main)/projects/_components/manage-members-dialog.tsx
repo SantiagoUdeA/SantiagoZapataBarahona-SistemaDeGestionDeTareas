@@ -73,7 +73,7 @@ export function ManageMembersDialog({ projectId, projectName }: ManageMembersDia
       if (result.error) {
         toast.error(result.error)
       } else {
-        toast.success('User assigned to project')
+        toast.success('Usuario asignado al proyecto')
         await load()
       }
     })
@@ -85,7 +85,7 @@ export function ManageMembersDialog({ projectId, projectName }: ManageMembersDia
       if (result.error) {
         toast.error(result.error)
       } else {
-        toast.success('User removed from project')
+        toast.success('Usuario eliminado del proyecto')
         await load()
       }
     })
@@ -102,14 +102,14 @@ export function ManageMembersDialog({ projectId, projectName }: ManageMembersDia
       <DialogTrigger asChild>
         <Button variant='outline' size='sm'>
           <HugeiconsIcon icon={UserGroupIcon} className='h-4 w-4' />
-          Members
+          Miembros
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Manage members — {projectName}</DialogTitle>
+          <DialogTitle>Gestionar miembros — {projectName}</DialogTitle>
           <DialogDescription>
-            Assign existing users as participants of this project.
+            Asigná usuarios al proyecto para que puedan colaborar en las tareas. 
           </DialogDescription>
         </DialogHeader>
 
@@ -117,27 +117,27 @@ export function ManageMembersDialog({ projectId, projectName }: ManageMembersDia
           <div className='flex gap-2'>
             <Select value={selected} onValueChange={setSelected} disabled={loading || pending}>
               <SelectTrigger className='flex-1'>
-                <SelectValue placeholder='Select a user to assign' />
+                <SelectValue placeholder='Seleccionar un usuario' />
               </SelectTrigger>
               <SelectContent>
                 {assignable.map((profile) => (
                   <SelectItem key={profile.id} value={profile.id}>
-                    {profile.fullName || 'Unnamed user'}
+                    {profile.fullName || 'Usuario sin nombre'}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
             <Button onClick={handleAssign} disabled={!selected || loading || pending}>
-              Assign
+              Asignar
             </Button>
           </div>
 
           <div className='space-y-2'>
             {loading && (
-              <p className='text-sm text-muted-foreground'>Loading members...</p>
+              <p className='text-sm text-muted-foreground'>Cargando miembros...</p>
             )}
             {!loading && members.length === 0 && (
-              <p className='text-sm text-muted-foreground'>No members assigned yet.</p>
+              <p className='text-sm text-muted-foreground'>No hay miembros asignados aún.</p>
             )}
             {members.map((member) => (
               <div key={member.id} className='flex items-center justify-between rounded-md border px-3 py-2'>
@@ -146,7 +146,7 @@ export function ManageMembersDialog({ projectId, projectName }: ManageMembersDia
                     {member.avatarUrl && <AvatarImage src={member.avatarUrl} alt={member.fullName ?? ''} />}
                     <AvatarFallback className='text-xs'>{initials(member.fullName)}</AvatarFallback>
                   </Avatar>
-                  <span className='text-sm font-medium'>{member.fullName || 'Unnamed user'}</span>
+                  <span className='text-sm font-medium'>{member.fullName || 'Usuario sin nombre'}</span>
                 </div>
                 <Button
                   variant='ghost'
@@ -164,7 +164,7 @@ export function ManageMembersDialog({ projectId, projectName }: ManageMembersDia
 
         <DialogFooter>
           <Button variant='outline' onClick={() => setOpen(false)}>
-            Close
+            Cerrar
           </Button>
         </DialogFooter>
       </DialogContent>

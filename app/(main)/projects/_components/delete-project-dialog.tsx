@@ -30,10 +30,10 @@ export function DeleteProjectDialog({
       if (result.error) {
         toast.error(result.error)
       } else {
-        toast.success('Project deleted')
+        toast.success('Proyecto eliminado')
       }
     } catch (err) {
-      toast.error('Failed to delete project')
+      toast.error('Error al eliminar el proyecto')
     }
   }
 
@@ -41,24 +41,23 @@ export function DeleteProjectDialog({
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button variant='destructive' size='sm'>
-          Delete
+          Eliminar
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Delete Project</AlertDialogTitle>
+          <AlertDialogTitle>Eliminar proyecto</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to delete "{projectName}"? This action cannot
-            be undone.
+            ¿Estás seguro de que deseas eliminar "{projectName}"? Esta acción no se puede deshacer.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>Cancelar</AlertDialogCancel>
           <AlertDialogAction
             onClick={handleDelete}
             className='bg-destructive text-destructive-foreground hover:bg-destructive/90'
           >
-            Delete
+            Eliminar
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
