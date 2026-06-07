@@ -14,6 +14,16 @@ export const ProfileUpdateSchema = z.object({
   bio: z.string().max(500).optional(),
 })
 
+export const UserCreateSchema = z.object({
+  email: z.string().email(),
+  fullName: z.string().min(2).max(100).optional(),
+  role: RoleEnum,
+})
+
+export const RoleUpdateSchema = z.object({
+  role: RoleEnum,
+})
+
 export const ProfileSelectSchema = z.object({
   id: z.string().uuid(),
   fullName: z.string().nullable(),

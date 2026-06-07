@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
-import { Enum_Role } from '@/app/generated/prisma/enums';
+import { Enum_Role } from '@/app/generated/prisma';
 import prisma from '@/lib/prisma';
 
 export async function requireAuth() {

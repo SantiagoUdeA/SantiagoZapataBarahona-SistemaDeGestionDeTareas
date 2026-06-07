@@ -1,30 +1,26 @@
-import { columns, User } from './columns';
-import { DataTable } from './data-table';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
+import { Suspense } from 'react'
+import { requireRole } from '@/lib/auth/guard'
+import { UsersList } from './_components/users-list'
+import { UsersSkeleton } from './_components/users-skeleton'
+import { CreateUserDialog } from './_components/create-user-dialog'
 
-async function getData(): Promise<User[]> {
-  const response = await fetch('http://localhost:3000/api/users');
-  const data = await response.json();
-
-  return data.users;
-}
-
-export default async function DemoPage() {
-  const data = await getData();
+export default async function UsersPage() {
+  const session = await requireRole('ADMIN')
 
   return (
-    <div className='container mx-auto py-10'>
-      <div className='flex flex-row justify-around my-10 '>
+    <div className='container mx-auto px-6 py-8'>
+      <div className='flex items-center justify-between mb-8'>
         <div>
-          <h2 className='text-2xl font-bold tracking-tight'>Users</h2>
-          <p className='text-muted-foreground'>Manage your users here.</p>
+          <h2 className='text-2xl font-bold tracking-tight'>Gestión de usuarios</h2>
+          <p className='text-muted-foreground'>
+            Gestioná el acceso al sistema y los roles de toda la organización.
+          </p>
         </div>
-        <Link href='/users/create'>
-          <Button className='ml-auto'>Create User</Button>
-        </Link>
+        <CreateUserDialog />
       </div>
-      <DataTable columns={columns} data={data} />
+      <Suspense fallback={<UsersSkeleton />}>
+        <UsersList currentUserId={session.id} />
+      </Suspense>
     </div>
-  );
+  )
 }
