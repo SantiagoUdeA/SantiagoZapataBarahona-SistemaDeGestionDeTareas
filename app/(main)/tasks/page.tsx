@@ -26,7 +26,7 @@ export default async function TasksPage({ searchParams }: TasksPageProps) {
 
   const isAdmin = session.role === 'ADMIN'
   const projects = await getSelectableProjects(session.id, isAdmin)
-  const selectedProjectId = projectId && projects.some((p) => p.id === projectId) ? projectId : undefined
+  const selectedProjectId = projectId && projects.some((p) => p.id === projectId) ? projectId : projects[0]?.id
 
   return (
     <div className='container mx-auto px-6 py-8'>
