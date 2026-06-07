@@ -1,17 +1,13 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { getSession } from '@/lib/auth/guard'
+import { getSession, requireAdminSession } from '@/lib/auth/guard'
 import prisma from '@/lib/prisma'
 
 export async function createProject(name: string) {
-  const session = await getSession()
-  if (!session) {
-    return { error: 'No autorizado' }
-  }
-  if (session.role !== 'ADMIN') {
-    return { error: 'No autorizado' }
-  }
+  const guard = await requireAdminSession()
+  if ('error' in guard) return { error: guard.error }
+  const session = guard.session
 
   try {
     const project = await prisma.project.create({
@@ -57,10 +53,9 @@ export async function updateProject(id: string, name: string) {
 }
 
 export async function getProjectMembers(projectId: string) {
-  const session = await getSession()
-  if (!session || session.role !== 'ADMIN') {
-    return { error: 'No autorizado' }
-  }
+  const guard = await requireAdminSession()
+  if ('error' in guard) return { error: guard.error }
+  const session = guard.session
 
   const [members, assignable] = await Promise.all([
     prisma.projectMember.findMany({

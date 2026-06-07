@@ -26,6 +26,13 @@ export async function requireRole(role: Enum_Role) {
   return session;
 }
 
+export async function requireAdminSession(): Promise<{ error: 'No autorizado' } | { error: 'Requiere rol ADMIN' } | { session: NonNullable<Awaited<ReturnType<typeof getSession>>> }> {
+  const session = await getSession();
+  if (!session) return { error: 'No autorizado' as const };
+  if (session.role !== 'ADMIN') return { error: 'Requiere rol ADMIN' as const };
+  return { session };
+}
+
 export async function getSession() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();

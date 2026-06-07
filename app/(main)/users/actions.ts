@@ -1,26 +1,15 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { getSession } from '@/lib/auth/guard'
+import { requireAdminSession } from '@/lib/auth/guard'
 import { createServiceClient } from '@/lib/supabase/admin'
 import prisma from '@/lib/prisma'
 import { UserCreateSchema, RoleUpdateSchema } from '@/lib/api/validation'
 
 const BANNED_DURATION = '876600h'
 
-async function requireAdmin() {
-  const session = await getSession()
-  if (!session) {
-    return { error: 'Unauthorized' as const }
-  }
-  if (session.role !== 'ADMIN') {
-    return { error: 'Forbidden' as const }
-  }
-  return { session }
-}
-
 export async function createUser(input: { email: string; fullName?: string; role: 'ADMIN' | 'USER' }) {
-  const guard = await requireAdmin()
+  const guard = await requireAdminSession()
   if ('error' in guard) return { error: guard.error }
 
   const parsed = UserCreateSchema.safeParse(input)
@@ -61,7 +50,7 @@ export async function createUser(input: { email: string; fullName?: string; role
 }
 
 export async function updateUserRole(userId: string, role: 'ADMIN' | 'USER') {
-  const guard = await requireAdmin()
+  const guard = await requireAdminSession()
   if ('error' in guard) return { error: guard.error }
 
   const parsed = RoleUpdateSchema.safeParse({ role })
@@ -85,7 +74,7 @@ export async function updateUserRole(userId: string, role: 'ADMIN' | 'USER') {
 }
 
 export async function deleteUser(userId: string) {
-  const guard = await requireAdmin()
+  const guard = await requireAdminSession()
   if ('error' in guard) return { error: guard.error }
 
   try {
@@ -103,7 +92,7 @@ export async function deleteUser(userId: string) {
 }
 
 export async function toggleUserEnabled(userId: string, enabled: boolean) {
-  const guard = await requireAdmin()
+  const guard = await requireAdminSession()
   if ('error' in guard) return { error: guard.error }
 
   try {
@@ -123,7 +112,7 @@ export async function toggleUserEnabled(userId: string, enabled: boolean) {
 }
 
 export async function assignUserToProject(projectId: string, profileId: string) {
-  const guard = await requireAdmin()
+  const guard = await requireAdminSession()
   if ('error' in guard) return { error: guard.error }
 
   const [project, profile] = await Promise.all([
@@ -147,7 +136,7 @@ export async function assignUserToProject(projectId: string, profileId: string) 
 }
 
 export async function removeUserFromProject(projectId: string, profileId: string) {
-  const guard = await requireAdmin()
+  const guard = await requireAdminSession()
   if ('error' in guard) return { error: guard.error }
 
   try {
