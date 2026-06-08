@@ -1,3 +1,7 @@
+// Login page (public route)
+// Two-panel layout: Brand messaging on desktop left, login form on right
+// Responsive: stacked on mobile, side-by-side on desktop
+
 'use client';
 
 import { LoginForm } from '@/components/login-form';
@@ -10,7 +14,7 @@ export default function LoginPage() {
     <div className='grid min-h-svh lg:grid-cols-2 bg-background'>
       {/* Left Panel - Brand Section (Desktop Only) */}
       <div className='hidden lg:flex flex-col justify-between p-10 bg-gradient-to-br from-slate-50 to-slate-100 border-r border-border relative overflow-hidden'>
-        {/* Pattern Background */}
+        {/* Decorative dot pattern background */}
         <div className='absolute inset-0 opacity-30'>
           <div className='absolute inset-0'
             style={{
@@ -34,12 +38,13 @@ export default function LoginPage() {
           </div>
         </div>
 
+        {/* Trust badge */}
         <div className='relative z-10 flex items-center gap-2 text-xs font-medium text-muted-foreground'>
           <HugeiconsIcon icon={IdVerifiedIcon} className='h-4 w-4 text-primary' />
           <span>Seguridad de nivel empresarial</span>
         </div>
 
-        {/* Decorative Element */}
+        {/* Decorative blur element */}
         <div className='absolute -bottom-20 -right-20 w-64 h-64 bg-blue-200 rounded-full blur-3xl opacity-20' />
       </div>
 

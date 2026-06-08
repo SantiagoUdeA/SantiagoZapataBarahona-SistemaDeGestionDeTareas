@@ -1,8 +1,16 @@
+// API route: /api/user
+// CRUD operations for user profiles
+// GET: Fetch profile by ID (authenticated users)
+// POST: Update own profile (authenticated users)
+// PUT: Update any profile (ADMIN only)
+// DELETE: Soft delete profile (ADMIN only)
+
 import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { requireAuthInRoute, requireRoleInRoute, jsonError } from '@/lib/api/auth'
 import { ProfileUpdateSchema } from '@/lib/api/validation'
 
+// GET: Fetch a profile by ID
 export async function GET(req: NextRequest) {
   const { session, status, error } = await requireAuthInRoute()
   if (status) return jsonError(error, status)
@@ -29,6 +37,8 @@ export async function GET(req: NextRequest) {
   }
 }
 
+// POST: Update current user's profile
+// Only the user can update their own profile
 export async function POST(req: NextRequest) {
   const { session, status, error } = await requireAuthInRoute()
   if (status || !session) return jsonError(error || 'Unauthorized', status || 401)
@@ -37,6 +47,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json()
     const validated = ProfileUpdateSchema.parse(body)
 
+    // Update only the authenticated user's profile
     const profile = await prisma.profile.update({
       where: { id: session.id },
       data: {
@@ -57,6 +68,8 @@ export async function POST(req: NextRequest) {
   }
 }
 
+// PUT: Update any profile (ADMIN only)
+// ADMIN can update any user's profile
 export async function PUT(req: NextRequest) {
   const { session, status, error } = await requireRoleInRoute('ADMIN')
   if (status || !session) return jsonError(error || 'Unauthorized', status || 401)
@@ -71,6 +84,7 @@ export async function PUT(req: NextRequest) {
 
     const validated = ProfileUpdateSchema.parse(data)
 
+    // ADMIN can update any profile
     const profile = await prisma.profile.update({
       where: { id },
       data: {
@@ -94,6 +108,8 @@ export async function PUT(req: NextRequest) {
   }
 }
 
+// DELETE: Soft delete a profile (ADMIN only)
+// Sets deleted = true instead of hard delete to preserve referential integrity
 export async function DELETE(req: NextRequest) {
   const { session, status, error } = await requireRoleInRoute('ADMIN')
   if (status || !session) return jsonError(error || 'Unauthorized', status || 401)
@@ -106,6 +122,7 @@ export async function DELETE(req: NextRequest) {
   }
 
   try {
+    // Soft delete: set deleted = true
     const profile = await prisma.profile.update({
       where: { id },
       data: {

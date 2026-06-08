@@ -1,23 +1,36 @@
+// Prisma client configuration
+// Generated to app/generated/prisma instead of default node_modules/.prisma/client
+// This avoids monorepo conflicts and enables custom imports via @/lib/prisma
 generator client {
   provider = "prisma-client-js"
   output   = "../app/generated/prisma"
 }
 
+// PostgreSQL data source
+// Connection URL from DATABASE_URL environment variable
 datasource db {
   provider  = "postgresql"
 }
 
+// Roles for role-based access control (RBAC)
+// ADMIN: Full access to all features (project creation, user management)
+// USER: Limited access (can only see assigned projects/tasks)
 enum Enum_Role {
   ADMIN
   USER
 }
 
+// Task status lifecycle: PENDING -> IN_PROGRESS -> COMPLETED
 enum Enum_TaskStatus {
   PENDING
   IN_PROGRESS
   COMPLETED
 }
 
+// Profile: User information synced from Supabase Auth
+// - Linked 1:1 with Supabase users via ID (created by trigger on signup)
+// - Stores application-specific metadata (fullName, avatar, bio, role)
+// - Tracks soft deletes (enabled/deleted flags) for recovery capabilities
 model Profile {
   id        String    @id @db.Uuid
   username  String?   @unique
@@ -28,6 +41,7 @@ model Profile {
   enabled   Boolean   @default(true)
   deleted   Boolean   @default(false)
 
+  // Relations: One profile can own multiple projects, create/assign/complete many tasks
   ownedProjects Project[]      @relation("ProjectOwner")
   assignedTasks Task[]         @relation("TaskAssignee")
   createdTasks   Task[]        @relation("TaskCreator")
@@ -40,6 +54,11 @@ model Profile {
   @@map("profiles")
 }
 
+// Project: Organizational container for tasks
+// - Created by ADMIN users only
+// - Has explicit membership (ProjectMember join table)
+// - Only members can see/create tasks within the project
+// - Cascade delete: removing a project deletes all associated tasks
 model Project {
   id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name      String
@@ -50,10 +69,15 @@ model Project {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([createdBy])
+  @@index([createdBy])  // Index for fast lookup of projects by creator
   @@map("projects")
 }
 
+// ProjectMember: Explicit join table for project membership
+// - Enables many-to-many relationship between Project and Profile
+// - Unique constraint ensures a profile can't be added multiple times to same project
+// - Used in access control: only members can view/edit project tasks
+// - Cascade delete ensures cleanup when project or profile is deleted
 model ProjectMember {
   id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   projectId String   @db.Uuid
@@ -62,12 +86,18 @@ model ProjectMember {
   profile   Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
 
-  @@unique([projectId, profileId])
-  @@index([projectId])
-  @@index([profileId])
+  @@unique([projectId, profileId])  // Prevent duplicate memberships
+  @@index([projectId])               // Fast lookup of members in a project
+  @@index([profileId])               // Fast lookup of projects a user is member of
   @@map("project_members")
 }
 
+// Task: Work unit within a project
+// - Assigned to exactly one project member (assignee must be a member)
+// - Tracks creation (createdBy) and completion (completedBy) separately
+// - Status transitions: PENDING -> IN_PROGRESS -> COMPLETED
+// - Cascade delete: removing project deletes all its tasks
+// - Optional completedBy/completedAt for tracking who marked it complete
 model Task {
   id          String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   title       String
@@ -79,13 +109,13 @@ model Task {
   assignee    Profile         @relation("TaskAssignee", fields: [assigneeId], references: [id])
   createdById   String        @db.Uuid
   createdBy     Profile       @relation("TaskCreator", fields: [createdById], references: [id])
-  completedAt   DateTime?
-  completedById String?       @db.Uuid
+  completedAt   DateTime?     // Null until task is marked COMPLETED
+  completedById String?       @db.Uuid  // Null until task is completed
   completedBy   Profile?      @relation("TaskCompleter", fields: [completedById], references: [id])
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
 
-  @@index([projectId])
-  @@index([assigneeId])
+  @@index([projectId])   // Fast lookup of tasks in a project
+  @@index([assigneeId])  // Fast lookup of tasks assigned to a user
   @@map("tasks")
 }

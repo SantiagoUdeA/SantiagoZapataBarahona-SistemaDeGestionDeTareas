@@ -1,3 +1,8 @@
+// Login form component (Client Component)
+// Handles email/password authentication via Supabase
+// On success: redirects to /dashboard
+// On error: displays user-friendly error message
+
 'use client';
 
 import { useState } from 'react';
@@ -19,17 +24,22 @@ import { Mail01Icon, AlertCircleIcon, LockIcon } from '@hugeicons/core-free-icon
 export function LoginForm({ className, ...props }: React.ComponentProps<'form'>) {
   const router = useRouter();
   const supabase = createClient();
+  
+  // Form state
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
+  // Handle form submission
+  // Calls Supabase signInWithPassword and redirects on success
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
     setIsLoading(true);
 
+    // Attempt authentication
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -41,12 +51,14 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'form'>)
       return;
     }
 
+    // Successful login: redirect to dashboard and refresh to get new session
     router.push('/dashboard');
     router.refresh();
   }
 
   return (
     <form onSubmit={handleSubmit} className={cn('flex flex-col gap-6', className)} {...props}>
+      {/* Heading */}
       <div className='flex flex-col gap-2 text-center lg:text-left'>
         <h1 className='text-3xl font-semibold tracking-tight'>Bienvenido</h1>
         <p className='text-sm text-muted-foreground'>
@@ -55,6 +67,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'form'>)
       </div>
 
       <FieldGroup className='gap-4'>
+        {/* Email field */}
         <Field>
           <FieldLabel htmlFor='email' className='text-xs uppercase tracking-wider'>
             Email
@@ -74,6 +87,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'form'>)
           </div>
         </Field>
 
+        {/* Password field with forgot password link */}
         <Field>
           <div className='flex items-center justify-between'>
             <FieldLabel htmlFor='password' className='text-xs uppercase tracking-wider'>
@@ -98,6 +112,54 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'form'>)
               className='pl-10'
               disabled={isLoading}
             />
+          </div>
+        </Field>
+
+        {/* Error message display */}
+        {error && (
+          <div className='flex items-start gap-3 p-3 bg-destructive/10 border border-destructive/20 rounded text-sm text-destructive'>
+            <HugeiconsIcon icon={AlertCircleIcon} className='h-5 w-5 flex-shrink-0 mt-0.5' />
+            <span>{error}</span>
+          </div>
+        )}
+
+        {/* Remember me checkbox (placeholder - not wired to backend) */}
+        <div className='flex items-center gap-2'>
+          <Checkbox
+            id='remember-me'
+            checked={rememberMe}
+            onCheckedChange={(checked) => setRememberMe(checked as boolean)}
+            disabled={isLoading}
+          />
+          <Label
+            htmlFor='remember-me'
+            className='text-sm font-normal text-muted-foreground cursor-pointer'
+          >
+            Recuérdame por 30 días
+          </Label>
+        </div>
+
+        {/* Submit button with loading state */}
+        <Button
+          type='submit'
+          disabled={isLoading}
+          className='w-full'
+          size='lg'
+        >
+          {isLoading ? 'Ingresando...' : 'Iniciar sesión'}
+        </Button>
+
+        {/* Link to signup */}
+        <p className='text-center text-sm text-muted-foreground'>
+          ¿No tienes cuenta?{' '}
+          <a href='/signup' className='text-primary hover:underline font-medium'>
+            Solicitar acceso
+          </a>
+        </p>
+      </FieldGroup>
+    </form>
+  );
+}
           </div>
         </Field>
 
