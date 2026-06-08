@@ -1,3 +1,9 @@
+# Despliegue en Vercel
+
+El despliegue se hizo desde un repositorio personal, sin embargo es el mismo código
+
+https://santiago-zapata-barahona-sistema-de-ten.vercel.app/
+
 # Integrantes
 
 Santiago Zapata Barahona
