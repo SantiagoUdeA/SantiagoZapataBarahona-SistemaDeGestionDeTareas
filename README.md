@@ -1,3 +1,11 @@
+# Integrantes
+
+Santiago Zapata Barahona
+
+# Usuario de acceso
+
+
+
 # TaskFlow — Modern Task Management System
 
 **TaskFlow** es un sistema moderno de gestión de tareas que permite a los usuarios organizar su trabajo a través de proyectos y tareas. Construido con **Next.js 16**, **React Server Components (RSC)**, **Prisma 7**, **PostgreSQL**, y **shadcn/ui**.
@@ -15,6 +23,12 @@ TaskFlow simplifica la colaboración en equipo al proporcionar:
 - ✅ **Dashboard Analítico** — Seguimiento de progreso de proyectos y tareas completadas
 - ✅ **Gestión de Usuarios** — Panel administrativo para gestionar roles y estado de usuarios
 - ✅ **Autenticación Segura** — Integración con Supabase Auth (email/contraseña)
+
+---
+
+## Aporte creativo
+
+Se añadio un chatbot de inteligencia artifical a la aplicación de manera que el usuario pueda interactuar con todos los componentes de la aplicación. El agente puede gestionar proyectos, miembros y tareas.
 
 ---
 
