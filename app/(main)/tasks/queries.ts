@@ -84,7 +84,7 @@ export async function getProgressOverTime(projectId: string) {
   // Get completion dates in chronological order
   const completions = tasks
     .filter((t): t is { completedAt: Date } => t.completedAt !== null)
-    .map((t) => t.toISOString().slice(0, 10))
+    .map((t) => t.completedAt.toISOString().slice(0, 10))
     .sort()
 
   if (completions.length === 0) return []
