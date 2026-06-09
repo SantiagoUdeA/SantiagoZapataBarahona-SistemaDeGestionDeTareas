@@ -20,11 +20,18 @@ enum Enum_Role {
   USER
 }
 
-// Task status lifecycle: PENDING -> IN_PROGRESS -> COMPLETED
-enum Enum_TaskStatus {
-  PENDING
-  IN_PROGRESS
-  COMPLETED
+// Movement types for the audit log
+// CREATED: Task was created
+// UPDATED: Task title/description was edited
+// COLUMN_CHANGED: Task moved between columns (includes entering/leaving isDone column)
+// REORDERED: Task reordered within the same column
+// DELETED: Task was deleted
+enum Enum_MovementType {
+  CREATED
+  UPDATED
+  COLUMN_CHANGED
+  REORDERED
+  DELETED
 }
 
 // Profile: User information synced from Supabase Auth
@@ -42,11 +49,12 @@ model Profile {
   deleted   Boolean   @default(false)
 
   // Relations: One profile can own multiple projects, create/assign/complete many tasks
-  ownedProjects Project[]      @relation("ProjectOwner")
-  assignedTasks Task[]         @relation("TaskAssignee")
-  createdTasks   Task[]        @relation("TaskCreator")
-  completedTasks Task[]        @relation("TaskCompleter")
+  ownedProjects      Project[]       @relation("ProjectOwner")
+  assignedTasks      Task[]          @relation("TaskAssignee")
+  createdTasks       Task[]          @relation("TaskCreator")
+  completedTasks     Task[]          @relation("TaskCompleter")
   projectMemberships ProjectMember[]
+  taskMovements      TaskMovement[]  @relation("MovementActor")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -58,16 +66,18 @@ model Profile {
 // - Created by ADMIN users only
 // - Has explicit membership (ProjectMember join table)
 // - Only members can see/create tasks within the project
-// - Cascade delete: removing a project deletes all associated tasks
+// - Cascade delete: removing a project deletes all associated tasks and columns
 model Project {
-  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id        String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name      String
-  createdBy String   @db.Uuid
-  owner     Profile  @relation("ProjectOwner", fields: [createdBy], references: [id])
+  createdBy String        @db.Uuid
+  owner     Profile       @relation("ProjectOwner", fields: [createdBy], references: [id])
   tasks     Task[]
   members   ProjectMember[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  columns   BoardColumn[]
+  movements TaskMovement[]
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
 
   @@index([createdBy])  // Index for fast lookup of projects by creator
   @@map("projects")
@@ -92,30 +102,85 @@ model ProjectMember {
   @@map("project_members")
 }
 
-// Task: Work unit within a project
+// BoardColumn: Configurable column within a project's kanban board
+// - Each project has its own set of columns (created by project owner / ADMIN)
+// - Ordered by position (0-based)
+// - isDone: tasks in this column are counted as completed (affects progress + completedAt)
+// - Cascade delete: removing a project removes all its columns
+// - Tasks cannot be deleted if the column has tasks (Restrict on Task.column)
+model BoardColumn {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  projectId String   @db.Uuid
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  name      String
+  position  Int      @default(0)   // order within the board (0-based)
+  isDone    Boolean  @default(false) // tasks here count as completed
+  tasks     Task[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([projectId, position])  // Efficient per-project ordered fetch
+  @@map("board_columns")
+}
+
+// Task: Work unit within a project column
+// - Belongs to a BoardColumn (which belongs to a Project)
 // - Assigned to exactly one project member (assignee must be a member)
 // - Tracks creation (createdBy) and completion (completedBy) separately
-// - Status transitions: PENDING -> IN_PROGRESS -> COMPLETED
+// - completedAt/completedById set when moved to an isDone column, cleared on move out
+// - position: order within the column (0-based, compacted on every move)
 // - Cascade delete: removing project deletes all its tasks
-// - Optional completedBy/completedAt for tracking who marked it complete
+// - Restrict: cannot delete a column that has tasks
 model Task {
-  id          String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id          String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   title       String
   description String?
-  status      Enum_TaskStatus @default(PENDING)
-  projectId   String          @db.Uuid
-  project     Project         @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  assigneeId  String          @db.Uuid
-  assignee    Profile         @relation("TaskAssignee", fields: [assigneeId], references: [id])
-  createdById   String        @db.Uuid
-  createdBy     Profile       @relation("TaskCreator", fields: [createdById], references: [id])
-  completedAt   DateTime?     // Null until task is marked COMPLETED
-  completedById String?       @db.Uuid  // Null until task is completed
-  completedBy   Profile?      @relation("TaskCompleter", fields: [completedById], references: [id])
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
+  columnId    String      @db.Uuid
+  column      BoardColumn @relation(fields: [columnId], references: [id], onDelete: Restrict)
+  position    Int         @default(0)  // order within the column (0-based)
+  projectId   String      @db.Uuid
+  project     Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  assigneeId  String      @db.Uuid
+  assignee    Profile     @relation("TaskAssignee", fields: [assigneeId], references: [id])
+  createdById   String    @db.Uuid
+  createdBy     Profile   @relation("TaskCreator", fields: [createdById], references: [id])
+  completedAt   DateTime? // Set when moved to isDone column, cleared on move out
+  completedById String?   @db.Uuid
+  completedBy   Profile?  @relation("TaskCompleter", fields: [completedById], references: [id])
+  movements     TaskMovement[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 
-  @@index([projectId])   // Fast lookup of tasks in a project
-  @@index([assigneeId])  // Fast lookup of tasks assigned to a user
+  @@index([projectId])          // Fast lookup of tasks in a project
+  @@index([assigneeId])         // Fast lookup of tasks assigned to a user
+  @@index([columnId, position]) // Efficient per-column ordered fetch
   @@map("tasks")
+}
+
+// TaskMovement: Audit log entry for every task mutation
+// - taskId nullable so the log survives task deletion (SetNull)
+// - projectId denormalized for cheap project-scoped filtering (survives task deletion)
+// - projectId cascades with project deletion (movements die with the project)
+// - taskTitle snapshot so the log reads correctly after rename or deletion
+// - fromColumn/toColumn: name snapshots for COLUMN_CHANGED movements
+// - detail: freeform JSON for extra context (position changes, field names, etc.)
+model TaskMovement {
+  id         String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  taskId     String?           @db.Uuid
+  task       Task?             @relation(fields: [taskId], references: [id], onDelete: SetNull)
+  projectId  String            @db.Uuid
+  project    Project           @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  actorId    String            @db.Uuid
+  actor      Profile           @relation("MovementActor", fields: [actorId], references: [id])
+  type       Enum_MovementType
+  taskTitle  String            // snapshot of task title at time of movement
+  fromColumn String?           // snapshot of source column name (COLUMN_CHANGED only)
+  toColumn   String?           // snapshot of destination column name (COLUMN_CHANGED only)
+  detail     Json?             // freeform: { fromPosition, toPosition }, { titleChanged }, etc.
+  createdAt  DateTime          @default(now())
+
+  @@index([projectId, createdAt]) // Efficient project-scoped audit trail queries
+  @@index([actorId])              // Fast lookup of movements by actor
+  @@index([type])                 // Filter by movement type
+  @@map("task_movements")
 }

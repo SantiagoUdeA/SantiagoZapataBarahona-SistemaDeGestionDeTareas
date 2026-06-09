@@ -20,16 +20,33 @@ export {
 
 export {
   listTasks,
+  listColumns,
   getProgressOverTime,
   createTask,
   updateTask,
-  updateTaskStatus,
+  moveTaskToColumn,
   getAssignableProfiles,
 } from './tasks'
 
+export {
+  createColumn,
+  renameColumn,
+  deleteColumn,
+  reorderColumn,
+  setColumnDone,
+  reorderTask,
+} from './columns'
+
+export {
+  listMovements,
+  listMovementProjects,
+} from './movements'
+
 import { listUsers, listAssignableUsers, createUser, updateUserRole, toggleUserEnabled, deleteUser, assignUserToProject, removeUserFromProject } from './users'
 import { listProjects, listSelectableProjects, createProject, updateProject, deleteProject, getProjectMembers } from './projects'
-import { listTasks, getProgressOverTime, createTask, updateTask, updateTaskStatus, getAssignableProfiles } from './tasks'
+import { listTasks, listColumns, getProgressOverTime, createTask, updateTask, moveTaskToColumn, getAssignableProfiles } from './tasks'
+import { createColumn, renameColumn, deleteColumn, reorderColumn, setColumnDone, reorderTask } from './columns'
+import { listMovements, listMovementProjects } from './movements'
 import type { ToolSet } from 'ai'
 
 export const toolset = {
@@ -48,9 +65,18 @@ export const toolset = {
   deleteProject,
   getProjectMembers,
   listTasks,
+  listColumns,
   getProgressOverTime,
   createTask,
   updateTask,
-  updateTaskStatus,
+  moveTaskToColumn,
   getAssignableProfiles,
+  createColumn,
+  renameColumn,
+  deleteColumn,
+  reorderColumn,
+  setColumnDone,
+  reorderTask,
+  listMovements,
+  listMovementProjects,
 } satisfies ToolSet

@@ -19,12 +19,11 @@ export async function getDashboardMetrics(
   const [activeProjects, inProgressTasks, completedLast30d] = await Promise.all([
     prisma.project.count({ where: projectScope }),
     prisma.task.count({
-      where: { project: projectScope, status: 'IN_PROGRESS' },
+      where: { project: projectScope, completedAt: null },
     }),
     prisma.task.count({
       where: {
         project: projectScope,
-        status: 'COMPLETED',
         completedAt: { gte: thirtyDaysAgo },
       },
     }),

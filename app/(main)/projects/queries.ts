@@ -15,7 +15,7 @@ export async function getProjects(userId: string, isAdmin: boolean) {
       : { members: { some: { profileId: userId } } },  // USER: projects they're member of
     include: {
       owner: { select: { id: true, fullName: true, avatarUrl: true } },
-      tasks: { select: { status: true } },  // Used for progress calculation
+      tasks: { select: { completedAt: true } },  // Used for progress calculation
     },
     orderBy: { createdAt: 'desc' },
   })
@@ -37,8 +37,8 @@ export async function getProjects(userId: string, isAdmin: boolean) {
 
 // Helper: Calculate completion percentage
 // Returns 0 if no tasks, otherwise (completed / total) * 100
-function calculateProgress(tasks: Array<{ status: string }>) {
+function calculateProgress(tasks: Array<{ completedAt: Date | null }>) {
   if (tasks.length === 0) return 0
-  const completed = tasks.filter(t => t.status === 'COMPLETED').length
+  const completed = tasks.filter(t => t.completedAt !== null).length
   return Math.round((completed / tasks.length) * 100)
 }

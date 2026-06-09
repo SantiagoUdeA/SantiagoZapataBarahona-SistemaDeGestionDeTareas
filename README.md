@@ -23,7 +23,7 @@ admin@test.com AdminTest123*
 TaskFlow simplifica la colaboración en equipo al proporcionar:
 
 - ✅ **Gestión de Proyectos** — Los administradores crean proyectos y agregan miembros
-- ✅ **Seguimiento de Tareas** — Crear, asignar y completar tareas con estado (PENDIENTE → EN PROGRESO → COMPLETADO)
+- ✅ **Seguimiento de Tareas** — Crear, asignar y completar tareas en un tablero kanban con columnas configurables
 - ✅ **Control de Acceso Basado en Roles** — ADMIN para gestión global, USER para colaboración
 - ✅ **Perfiles de Usuario** — Información del usuario, bio, avatar, rol
 - ✅ **Dashboard Analítico** — Seguimiento de progreso de proyectos y tareas completadas
@@ -100,9 +100,8 @@ Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
 
 ```
 app/
-├── (auth)/                    # Rutas públicas (Login, Signup)
+├── (auth)/                    # Rutas públicas (Login, Change-password)
 │   ├── login/
-│   ├── signup/
 │   └── change-password/
 ├── (main)/                    # Rutas protegidas (requieren autenticación)
 │   ├── dashboard/             # Dashboard principal (overview)
@@ -134,7 +133,6 @@ components/
 ├── app-sidebar.tsx            # Barra lateral con navegación
 ├── top-bar.tsx                # Barra superior
 ├── login-form.tsx             # Formulario de login
-├── signup-form.tsx            # Formulario de registro
 ├── data-table.tsx             # Componente tabla reutilizable
 ├── ui/                        # shadcn/ui components
 │   ├── button.tsx
@@ -220,12 +218,24 @@ docs/                          # Documentación interna
   id: UUID
   title: string
   description: string
-  status: PENDING | IN_PROGRESS | COMPLETED
+  columnId: UUID       // Columna del kanban donde reside
+  position: number     // Orden dentro de la columna
   projectId: UUID       // Proyecto al que pertenece
   assigneeId: UUID      // Usuario asignado (debe ser miembro del proyecto)
   createdById: UUID     // Quién creó la tarea
   completedById: UUID   // Quién completó (si aplica)
   completedAt: Date     // Cuándo se completó
+}
+```
+
+#### **BoardColumn**
+```typescript
+{
+  id: UUID
+  projectId: UUID      // Proyecto al que pertenece
+  name: string         // Nombre visible de la columna
+  position: number     // Orden en el tablero
+  isDone: boolean      // Si las tareas aquí cuentan como completadas
 }
 ```
 
@@ -308,7 +318,7 @@ export async function getTasksByProject(projectId: string) {
 
 ```tsx
 <Suspense fallback={<TasksSkeleton />}>
-  <TasksList projectId={id} />  {/* RSC async component */}
+  <TaskBoard projectId={id} userId={userId} isAdmin={isAdmin} isOwner={isOwner} />
 </Suspense>
 ```
 

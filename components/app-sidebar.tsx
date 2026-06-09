@@ -16,7 +16,7 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { HugeiconsIcon } from '@hugeicons/react';
-import { DashboardSquare01Icon, CommandIcon, Folder01Icon, UserGroupIcon, Settings05Icon, HelpCircleIcon, SearchIcon } from '@hugeicons/core-free-icons';
+import { DashboardSquare01Icon, CommandIcon, Folder01Icon, UserGroupIcon, Settings05Icon, HelpCircleIcon, SearchIcon, Activity01Icon } from '@hugeicons/core-free-icons';
 import { NavSecondary } from '@/components/nav-secondary';
 
 // Base navigation items visible to all authenticated users
@@ -35,6 +35,11 @@ const baseNavItems = [
     title: 'Tareas',
     url: '/tasks',
     icon: <HugeiconsIcon icon={CommandIcon} strokeWidth={2} />,
+  },
+  {
+    title: 'Movimientos',
+    url: '/movements',
+    icon: <HugeiconsIcon icon={Activity01Icon} strokeWidth={2} />,
   },
 ];
 

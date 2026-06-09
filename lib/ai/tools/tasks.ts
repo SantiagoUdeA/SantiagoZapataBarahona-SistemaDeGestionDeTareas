@@ -1,15 +1,20 @@
+// NOTE: All task mutations go through server actions in app/(main)/tasks/actions.ts.
+// Audit logging is handled inside those actions — do NOT call prisma.task directly from here.
+
 import { tool } from 'ai'
 import { z } from 'zod'
 import { getSession } from '@/lib/auth/guard'
 import {
   createTask as createTaskAction,
   updateTask as updateTaskAction,
-  updateTaskStatus as updateTaskStatusAction,
+  moveTask as moveTaskAction,
   getAssignableProfiles as getAssignableProfilesAction,
 } from '@/app/(main)/tasks/actions'
-import { getTasks, getProgressOverTime as getProgressOverTimeQuery } from '@/app/(main)/tasks/queries'
-
-const TASK_STATUSES = ['PENDING', 'IN_PROGRESS', 'COMPLETED'] as const
+import {
+  getTasks,
+  getBoardColumns,
+  getProgressOverTime as getProgressOverTimeQuery,
+} from '@/app/(main)/tasks/queries'
 
 export const listTasks = tool({
   description: 'Lista las tareas de un proyecto. Solo usuarios con acceso al proyecto.',
@@ -20,6 +25,16 @@ export const listTasks = tool({
     const session = await getSession()
     if (!session) return { error: 'No autorizado' }
     return getTasks(projectId, session.id, session.role === 'ADMIN')
+  },
+})
+
+export const listColumns = tool({
+  description: 'Lista las columnas del kanban de un proyecto con conteo de tareas.',
+  inputSchema: z.object({
+    projectId: z.string().uuid(),
+  }),
+  execute: async ({ projectId }) => {
+    return getBoardColumns(projectId)
   },
 })
 
@@ -42,14 +57,16 @@ export const createTask = tool({
     title: z.string().min(1).max(500),
     assigneeId: z.string().uuid(),
     description: z.string().optional(),
+    columnId: z.string().uuid().optional(),
   }),
-  execute: async ({ projectId, title, assigneeId, description }) => {
-    return createTaskAction(projectId, title, assigneeId, description ?? '')
+  execute: async ({ projectId, title, assigneeId, description, columnId }) => {
+    return createTaskAction(projectId, title, assigneeId, description ?? '', columnId)
   },
 })
 
 export const updateTask = tool({
-  description: 'Edita el título y la descripción de una tarea. El usuario debe ser assignee, owner del proyecto o admin.',
+  description:
+    'Edita el título y la descripción de una tarea. El usuario debe ser assignee, owner del proyecto o admin.',
   inputSchema: z.object({
     taskId: z.string().uuid(),
     title: z.string().min(1).max(500),
@@ -60,14 +77,16 @@ export const updateTask = tool({
   },
 })
 
-export const updateTaskStatus = tool({
-  description: 'Cambia el estado de una tarea. El usuario debe ser assignee, owner del proyecto o admin.',
+export const moveTaskToColumn = tool({
+  description:
+    'Mueve una tarea a otra columna del kanban. Llama a listColumns primero para obtener los IDs disponibles. La tarea se agrega al final de la columna destino.',
   inputSchema: z.object({
     taskId: z.string().uuid(),
-    status: z.enum(TASK_STATUSES),
+    columnId: z.string().uuid(),
   }),
-  execute: async ({ taskId, status }) => {
-    return updateTaskStatusAction(taskId, status)
+  execute: async ({ taskId, columnId }) => {
+    // 9999 appends to end — moveTask shifts existing tasks and places this one last
+    return moveTaskAction(taskId, columnId, 9999)
   },
 })
 
