@@ -24,7 +24,7 @@ export async function proxy(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser()
 
   const pathname = request.nextUrl.pathname
-  const exemptPaths = ['/change-password', '/login', '/signup', '/auth', '/api']
+  const exemptPaths = ['/change-password', '/login', '/auth', '/api']
   const isExempt = exemptPaths.some((path) => pathname.startsWith(path))
 
   if (user?.user_metadata?.must_change_password === true && !isExempt) {

@@ -126,12 +126,6 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'form'>)
           {isLoading ? 'Ingresando...' : 'Iniciar sesión'}
         </Button>
 
-        <p className='text-center text-sm text-muted-foreground'>
-          ¿No tienes cuenta?{' '}
-          <a href='/signup' className='text-primary hover:underline font-medium'>
-            Solicitar acceso
-          </a>
-        </p>
       </FieldGroup>
     </form>
   );

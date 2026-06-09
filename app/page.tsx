@@ -85,17 +85,10 @@ export default async function HomePage() {
                 asChild
                 className="h-auto w-full rounded bg-[#182820] px-10 py-3 text-xs font-semibold uppercase tracking-wider text-white transition-all hover:bg-[#516258] active:scale-95 sm:w-auto"
               >
-                <Link href="/signup" className="flex items-center gap-2">
-                  Registrarse
+                <Link href="/login" className="flex items-center gap-2">
+                  Iniciar sesión
                   <HugeiconsIcon icon={ArrowRight01Icon} size={18} />
                 </Link>
-              </Button>
-              <Button
-                asChild
-                variant="outline"
-                className="h-auto w-full rounded border-[#737874] px-10 py-3 text-xs font-semibold uppercase tracking-wider text-[#4b41e1] transition-all hover:bg-[#eff4ff] active:scale-95 sm:w-auto"
-              >
-                <Link href="/login">Iniciar sesión</Link>
               </Button>
             </div>
           </div>
