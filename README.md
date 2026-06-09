@@ -10,7 +10,7 @@ Santiago Zapata Barahona
 
 # Usuario de acceso
 
-
+admin@test.com AdminTest123*
 
 # TaskFlow — Modern Task Management System
 
@@ -29,6 +29,30 @@ TaskFlow simplifica la colaboración en equipo al proporcionar:
 - ✅ **Dashboard Analítico** — Seguimiento de progreso de proyectos y tareas completadas
 - ✅ **Gestión de Usuarios** — Panel administrativo para gestionar roles y estado de usuarios
 - ✅ **Autenticación Segura** — Integración con Supabase Auth (email/contraseña)
+
+---
+## Funcionalidades
+
+### Tablero Kanban
+
+<img width="2001" height="1124" alt="image" src="https://github.com/user-attachments/assets/a2fbdbb0-ead0-4b7c-a6e6-00ff0c0a1190" />
+
+
+### Asistente IA
+
+<img width="708" height="1212" alt="image" src="https://github.com/user-attachments/assets/9c65a4f7-59ff-44c9-a92d-4e6f96b9f360" />
+
+### CRUD de proyectos
+
+<img width="2003" height="544" alt="image" src="https://github.com/user-attachments/assets/dc46b03e-8a09-4ae8-8119-4288379b07c3" />
+
+### Gestión de usuarios
+
+<img width="2000" height="648" alt="image" src="https://github.com/user-attachments/assets/8f67e225-6bbd-44af-875f-6e5d64b8147e" />
+
+### Registro de movimientos
+
+<img width="2008" height="1177" alt="image" src="https://github.com/user-attachments/assets/9e43e990-d476-4151-891a-5ccbfb17277a" />
 
 ---
 
@@ -459,12 +483,6 @@ pnpm prisma migrate deploy
 3. Crea PR con descripción clara
 4. Espera review
 5. Merge a `main`
-
----
-
-## 📄 Licencia
-
-[Especificar licencia aquí]
 
 ---
 
