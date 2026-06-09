@@ -5,30 +5,30 @@ import { Button } from '@/components/ui/button';
 import { Logo } from '@/components/logo';
 import { HugeiconsIcon } from '@hugeicons/react';
 import {
-  FlashIcon,
-  Analytics01Icon,
-  LockKeyIcon,
+  FolderIcon,
+  CheckListIcon,
+  Robot01Icon,
   ArrowRight01Icon,
 } from '@hugeicons/core-free-icons';
 
 const FEATURES = [
   {
-    icon: FlashIcon,
-    title: 'Velocidad sin concesiones',
+    icon: FolderIcon,
+    title: 'Gestión de Proyectos',
     description:
-      'Diseñado para respuesta inmediata. Navega, crea y actualiza tareas sin fricciones ni demoras.',
+      'Crea proyectos y agrega miembros del equipo. Los administradores tienen control total sobre la organización y estructura de los proyectos.',
   },
   {
-    icon: Analytics01Icon,
-    title: 'Insights profundos',
+    icon: CheckListIcon,
+    title: 'Seguimiento de Tareas',
     description:
-      'Convierte flujos de trabajo caóticos en datos estructurados y accionables con reportes inteligentes.',
+      'Crea, asigna y completa tareas con estado (Pendiente, En Progreso, Completado). Colaboración en tiempo real con visibilidad total del progreso.',
   },
   {
-    icon: LockKeyIcon,
-    title: 'Seguridad empresarial',
+    icon: Robot01Icon,
+    title: 'Asistente IA Inteligente',
     description:
-      'Encriptación de nivel bancario y controles de acceso granulares para mantener los datos de tu equipo protegidos.',
+      'Interactúa con un chatbot de inteligencia artificial que gestiona proyectos, miembros y tareas directamente desde el chat.',
   },
 ];
 
@@ -48,7 +48,16 @@ export default async function HomePage() {
       <header className="sticky top-0 z-50 w-full border-b border-[#d3e4fe] bg-[#f8f9ff]">
         <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
           <Logo href="/" showText size="md" />
-        </div>
+          <Button
+            asChild
+            className="h-auto w-full rounded bg-[#182820] px-10 py-3 text-xs font-semibold uppercase tracking-wider text-white transition-all hover:bg-[#516258] active:scale-95 sm:w-auto"
+            >
+            <Link href="/login" className="flex items-center gap-2">
+              Iniciar sesión
+              <HugeiconsIcon icon={ArrowRight01Icon} size={18} />
+            </Link>
+          </Button>
+      </div>
       </header>
 
       <main className="flex flex-grow flex-col">
@@ -76,21 +85,10 @@ export default async function HomePage() {
             >
               El trabajo de tu equipo, organizado.
             </h1>
-            <p className="mx-auto mb-10 max-w-2xl text-base text-[#434844]">
+            <p className="mx-auto max-w-2xl text-base text-[#434844]">
               TaskFlow es la capa base para equipos de alto rendimiento. Diseñado meticulosamente
               para la velocidad, la claridad y la precisión sin concesiones.
             </p>
-            <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <Button
-                asChild
-                className="h-auto w-full rounded bg-[#182820] px-10 py-3 text-xs font-semibold uppercase tracking-wider text-white transition-all hover:bg-[#516258] active:scale-95 sm:w-auto"
-              >
-                <Link href="/login" className="flex items-center gap-2">
-                  Iniciar sesión
-                  <HugeiconsIcon icon={ArrowRight01Icon} size={18} />
-                </Link>
-              </Button>
-            </div>
           </div>
         </section>
 
